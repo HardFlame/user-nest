@@ -1,0 +1,15 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+  moduleFormat = "cjs"
+}
+
+datasource postgresql {
+  provider = "postgresql"
+}
+
+model UserNest {
+  id    Int     @id @default(autoincrement())
+  email String  @unique
+  name  String?
+}
