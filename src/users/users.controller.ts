@@ -5,7 +5,7 @@ import {
   Get,
   Param,
   Patch,
-  Put,
+  // Put,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { type UserNest } from 'src/generated/prisma/client';
@@ -24,10 +24,10 @@ export class UsersController {
     return this.userService.user({ id: +id });
   }
 
-  @Put()
+  /*@Put()
   create(@Body() createUserDto: UserNest) {
     return this.userService.createUser(createUserDto);
-  }
+  }*/
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateUserDto: UserNest) {

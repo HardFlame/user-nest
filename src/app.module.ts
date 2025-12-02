@@ -5,13 +5,14 @@ import { DatabaseModule } from './database/database.module';
 import { UsersService } from './users/users.service';
 import { UsersController } from './users/users.controller';
 import { ConfigModule } from '@nestjs/config';
-
+import { AuthModule } from './auth/auth.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
       envFilePath: `.env`,
     }),
     DatabaseModule,
+    AuthModule,
   ],
   controllers: [AppController, UsersController],
   providers: [AppService, UsersService],

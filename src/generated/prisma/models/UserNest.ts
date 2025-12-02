@@ -38,18 +38,24 @@ export type UserNestMinAggregateOutputType = {
   id: number | null
   email: string | null
   name: string | null
+  role: string | null
+  password: string | null
 }
 
 export type UserNestMaxAggregateOutputType = {
   id: number | null
   email: string | null
   name: string | null
+  role: string | null
+  password: string | null
 }
 
 export type UserNestCountAggregateOutputType = {
   id: number
   email: number
   name: number
+  role: number
+  password: number
   _all: number
 }
 
@@ -66,18 +72,24 @@ export type UserNestMinAggregateInputType = {
   id?: true
   email?: true
   name?: true
+  role?: true
+  password?: true
 }
 
 export type UserNestMaxAggregateInputType = {
   id?: true
   email?: true
   name?: true
+  role?: true
+  password?: true
 }
 
 export type UserNestCountAggregateInputType = {
   id?: true
   email?: true
   name?: true
+  role?: true
+  password?: true
   _all?: true
 }
 
@@ -171,6 +183,8 @@ export type UserNestGroupByOutputType = {
   id: number
   email: string
   name: string | null
+  role: string | null
+  password: string | null
   _count: UserNestCountAggregateOutputType | null
   _avg: UserNestAvgAggregateOutputType | null
   _sum: UserNestSumAggregateOutputType | null
@@ -200,12 +214,16 @@ export type UserNestWhereInput = {
   id?: Prisma.IntFilter<"UserNest"> | number
   email?: Prisma.StringFilter<"UserNest"> | string
   name?: Prisma.StringNullableFilter<"UserNest"> | string | null
+  role?: Prisma.StringNullableFilter<"UserNest"> | string | null
+  password?: Prisma.StringNullableFilter<"UserNest"> | string | null
 }
 
 export type UserNestOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   email?: Prisma.SortOrder
   name?: Prisma.SortOrderInput | Prisma.SortOrder
+  role?: Prisma.SortOrderInput | Prisma.SortOrder
+  password?: Prisma.SortOrderInput | Prisma.SortOrder
 }
 
 export type UserNestWhereUniqueInput = Prisma.AtLeast<{
@@ -215,12 +233,16 @@ export type UserNestWhereUniqueInput = Prisma.AtLeast<{
   OR?: Prisma.UserNestWhereInput[]
   NOT?: Prisma.UserNestWhereInput | Prisma.UserNestWhereInput[]
   name?: Prisma.StringNullableFilter<"UserNest"> | string | null
+  role?: Prisma.StringNullableFilter<"UserNest"> | string | null
+  password?: Prisma.StringNullableFilter<"UserNest"> | string | null
 }, "id" | "email">
 
 export type UserNestOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   email?: Prisma.SortOrder
   name?: Prisma.SortOrderInput | Prisma.SortOrder
+  role?: Prisma.SortOrderInput | Prisma.SortOrder
+  password?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.UserNestCountOrderByAggregateInput
   _avg?: Prisma.UserNestAvgOrderByAggregateInput
   _max?: Prisma.UserNestMaxOrderByAggregateInput
@@ -235,51 +257,69 @@ export type UserNestScalarWhereWithAggregatesInput = {
   id?: Prisma.IntWithAggregatesFilter<"UserNest"> | number
   email?: Prisma.StringWithAggregatesFilter<"UserNest"> | string
   name?: Prisma.StringNullableWithAggregatesFilter<"UserNest"> | string | null
+  role?: Prisma.StringNullableWithAggregatesFilter<"UserNest"> | string | null
+  password?: Prisma.StringNullableWithAggregatesFilter<"UserNest"> | string | null
 }
 
 export type UserNestCreateInput = {
   email: string
   name?: string | null
+  role?: string | null
+  password?: string | null
 }
 
 export type UserNestUncheckedCreateInput = {
   id?: number
   email: string
   name?: string | null
+  role?: string | null
+  password?: string | null
 }
 
 export type UserNestUpdateInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type UserNestUncheckedUpdateInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   email?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type UserNestCreateManyInput = {
   id?: number
   email: string
   name?: string | null
+  role?: string | null
+  password?: string | null
 }
 
 export type UserNestUpdateManyMutationInput = {
   email?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type UserNestUncheckedUpdateManyInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   email?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type UserNestCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   email?: Prisma.SortOrder
   name?: Prisma.SortOrder
+  role?: Prisma.SortOrder
+  password?: Prisma.SortOrder
 }
 
 export type UserNestAvgOrderByAggregateInput = {
@@ -290,12 +330,16 @@ export type UserNestMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   email?: Prisma.SortOrder
   name?: Prisma.SortOrder
+  role?: Prisma.SortOrder
+  password?: Prisma.SortOrder
 }
 
 export type UserNestMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   email?: Prisma.SortOrder
   name?: Prisma.SortOrder
+  role?: Prisma.SortOrder
+  password?: Prisma.SortOrder
 }
 
 export type UserNestSumOrderByAggregateInput = {
@@ -324,27 +368,35 @@ export type UserNestSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   id?: boolean
   email?: boolean
   name?: boolean
+  role?: boolean
+  password?: boolean
 }, ExtArgs["result"]["userNest"]>
 
 export type UserNestSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   email?: boolean
   name?: boolean
+  role?: boolean
+  password?: boolean
 }, ExtArgs["result"]["userNest"]>
 
 export type UserNestSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   email?: boolean
   name?: boolean
+  role?: boolean
+  password?: boolean
 }, ExtArgs["result"]["userNest"]>
 
 export type UserNestSelectScalar = {
   id?: boolean
   email?: boolean
   name?: boolean
+  role?: boolean
+  password?: boolean
 }
 
-export type UserNestOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "name", ExtArgs["result"]["userNest"]>
+export type UserNestOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "name" | "role" | "password", ExtArgs["result"]["userNest"]>
 
 export type $UserNestPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "UserNest"
@@ -353,6 +405,8 @@ export type $UserNestPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     id: number
     email: string
     name: string | null
+    role: string | null
+    password: string | null
   }, ExtArgs["result"]["userNest"]>
   composites: {}
 }
@@ -779,6 +833,8 @@ export interface UserNestFieldRefs {
   readonly id: Prisma.FieldRef<"UserNest", 'Int'>
   readonly email: Prisma.FieldRef<"UserNest", 'String'>
   readonly name: Prisma.FieldRef<"UserNest", 'String'>
+  readonly role: Prisma.FieldRef<"UserNest", 'String'>
+  readonly password: Prisma.FieldRef<"UserNest", 'String'>
 }
     
 
