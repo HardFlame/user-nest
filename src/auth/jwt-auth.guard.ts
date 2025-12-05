@@ -3,23 +3,44 @@ import {
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
+import { Reflector } from '@nestjs/core';
+import { JwtService } from '@nestjs/jwt';
 import { AuthGuard } from '@nestjs/passport';
-
+import { Request } from 'express';
 @Injectable()
 export class JwtAuthGuard extends AuthGuard('jwt') {
-  canActivate(context: ExecutionContext) {
-    // Add your custom authentication logic here
-    // for example, call super.logIn(request) to establish a session.
-    return super.canActivate(context);
+  constructor(
+    private reflector: Reflector,
+    private jwtService: JwtService,
+  ) {
+    super();
   }
 
-  handleRequest(err, user, info) {
-    // You can throw an exception based on either "info" or "err" arguments
-    if (err || !user) {
-      throw err || new UnauthorizedException();
+  async canActivate(context: ExecutionContext) {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+    const request = context.switchToHttp().getRequest();
+    const token = this.extractTokenFromHeader(request);
+    if (!token) {
+      throw new UnauthorizedException();
     }
-    console.log('info', info);
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-    return user;
+    try {
+      const jwtSecret = process.env.JWT_SECRET;
+      if (!jwtSecret) {
+        throw new Error('JWT_SECRET environment variable is not set');
+      }
+      const payload: { email: string; id: number } =
+        await this.jwtService.verifyAsync(token, {
+          secret: jwtSecret,
+        });
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+      request['user'] = payload;
+    } catch {
+      throw new UnauthorizedException();
+    }
+    return true;
+  }
+  private extractTokenFromHeader(request: Request): string | undefined {
+    const [type, token] = request.headers.authorization?.split(' ') ?? [];
+    return type === 'Bearer' ? token : undefined;
   }
 }

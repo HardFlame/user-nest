@@ -5,11 +5,13 @@ import {
   HttpException,
   HttpStatus,
   Post,
+  Request,
   UseGuards,
 } from '@nestjs/common';
-import { AuthService } from './auth.service';
+
 import { JwtAuthGuard } from './jwt-auth.guard';
 import { type UserNestCreateInput } from 'src/generated/prisma/models';
+import { AuthService } from './auth.service';
 
 @Controller('auth')
 export class AuthController {
@@ -31,10 +33,11 @@ export class AuthController {
       password: body.password,
     });
   }
-  //TODO
+
   @UseGuards(JwtAuthGuard)
   @Get('profile')
-  getProfile(/*@Request() req*/) {
-    return 'done'; //req.user;
+  getProfile(@Request() req: any) {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-member-access
+    return req.user;
   }
 }
