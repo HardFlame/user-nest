@@ -1,5 +1,4 @@
-import { Injectable } from '@nestjs/common';
-import { Role, Roles } from 'src/auth/auth.decorator';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { DatabaseService } from 'src/database/database.service';
 import { Prisma } from 'src/generated/prisma/client';
 
@@ -38,17 +37,37 @@ export class UsersService {
     data: Prisma.UserNestUpdateInput;
   }) {
     const { where, data } = params;
+
     return this.database.userNest.update({
       data,
       where,
     });
   }
-  @Roles(Role.ADMIN)
+
   async deleteUser(where: Prisma.UserNestWhereUniqueInput) {
     const data = { deleted: true };
-    return this.database.userNest.update({
-      data,
-      where,
-    });
+    try {
+      return await this.database.userNest.update({
+        data,
+        where: {
+          ...where,
+          AND: [
+            {
+              NOT: {
+                roles: {
+                  has: 'ADMIN',
+                },
+              },
+            },
+          ],
+        },
+      });
+    } catch (error) {
+      console.log(error);
+      throw new HttpException(
+        'You cannot delete the administrator',
+        HttpStatus.NOT_ACCEPTABLE,
+      );
+    }
   }
 }

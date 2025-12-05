@@ -9,6 +9,7 @@ import {
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { type UserNest } from 'src/generated/prisma/client';
+import { Role, Roles } from 'src/auth/auth.decorator';
 
 @Controller('users')
 export class UsersController {
@@ -16,7 +17,7 @@ export class UsersController {
 
   @Get()
   async getAllUsers() {
-    return this.userService.users({});
+    return this.userService.users({ where: { deleted: false } });
   }
 
   @Get(':id')
@@ -36,8 +37,8 @@ export class UsersController {
       data: updateUserDto,
     });
   }
-
   @Delete(':id')
+  @Roles(Role.ADMIN)
   remove(@Param('id') id: string) {
     return this.userService.deleteUser({ id: +id });
   }

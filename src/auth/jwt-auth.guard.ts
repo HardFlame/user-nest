@@ -54,7 +54,7 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
           // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
           user?.roles?.includes(role),
         );
-        if (hasRole) throw new UnauthorizedException();
+        if (!hasRole) throw new UnauthorizedException();
       }
     } catch {
       throw new UnauthorizedException();
