@@ -42,3 +42,8 @@ export { Prisma }
  * 
  */
 export type UserNest = Prisma.UserNestModel
+/**
+ * Model TaskNest
+ * 
+ */
+export type TaskNest = Prisma.TaskNestModel

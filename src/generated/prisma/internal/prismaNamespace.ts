@@ -384,7 +384,8 @@ type FieldRefInputType<Model, FieldType> = Model extends never ? never : FieldRe
 
 
 export const ModelName = {
-  UserNest: 'UserNest'
+  UserNest: 'UserNest',
+  TaskNest: 'TaskNest'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -400,7 +401,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "userNest"
+    modelProps: "userNest" | "taskNest"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -478,6 +479,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    TaskNest: {
+      payload: Prisma.$TaskNestPayload<ExtArgs>
+      fields: Prisma.TaskNestFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.TaskNestFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TaskNestPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.TaskNestFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TaskNestPayload>
+        }
+        findFirst: {
+          args: Prisma.TaskNestFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TaskNestPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.TaskNestFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TaskNestPayload>
+        }
+        findMany: {
+          args: Prisma.TaskNestFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TaskNestPayload>[]
+        }
+        create: {
+          args: Prisma.TaskNestCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TaskNestPayload>
+        }
+        createMany: {
+          args: Prisma.TaskNestCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.TaskNestCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TaskNestPayload>[]
+        }
+        delete: {
+          args: Prisma.TaskNestDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TaskNestPayload>
+        }
+        update: {
+          args: Prisma.TaskNestUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TaskNestPayload>
+        }
+        deleteMany: {
+          args: Prisma.TaskNestDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.TaskNestUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.TaskNestUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TaskNestPayload>[]
+        }
+        upsert: {
+          args: Prisma.TaskNestUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TaskNestPayload>
+        }
+        aggregate: {
+          args: Prisma.TaskNestAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateTaskNest>
+        }
+        groupBy: {
+          args: Prisma.TaskNestGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.TaskNestGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.TaskNestCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.TaskNestCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -527,6 +602,18 @@ export const UserNestScalarFieldEnum = {
 } as const
 
 export type UserNestScalarFieldEnum = (typeof UserNestScalarFieldEnum)[keyof typeof UserNestScalarFieldEnum]
+
+
+export const TaskNestScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  created: 'created',
+  updated: 'updated',
+  title: 'title',
+  text: 'text'
+} as const
+
+export type TaskNestScalarFieldEnum = (typeof TaskNestScalarFieldEnum)[keyof typeof TaskNestScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -605,6 +692,20 @@ export type EnumRolesFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaMode
  * Reference to a field of type 'Boolean'
  */
 export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
+    
+
+
+/**
+ * Reference to a field of type 'DateTime'
+ */
+export type DateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime'>
+    
+
+
+/**
+ * Reference to a field of type 'DateTime[]'
+ */
+export type ListDateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime[]'>
     
 
 
@@ -701,6 +802,7 @@ export type PrismaClientOptions = ({
 }
 export type GlobalOmitConfig = {
   userNest?: Prisma.UserNestOmit
+  taskNest?: Prisma.TaskNestOmit
 }
 
 /* Types for Logging */

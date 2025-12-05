@@ -220,6 +220,7 @@ export type UserNestWhereInput = {
   roles?: Prisma.EnumRolesNullableListFilter<"UserNest">
   password?: Prisma.StringNullableFilter<"UserNest"> | string | null
   deleted?: Prisma.BoolFilter<"UserNest"> | boolean
+  tasks?: Prisma.TaskNestListRelationFilter
 }
 
 export type UserNestOrderByWithRelationInput = {
@@ -229,6 +230,7 @@ export type UserNestOrderByWithRelationInput = {
   roles?: Prisma.SortOrder
   password?: Prisma.SortOrderInput | Prisma.SortOrder
   deleted?: Prisma.SortOrder
+  tasks?: Prisma.TaskNestOrderByRelationAggregateInput
 }
 
 export type UserNestWhereUniqueInput = Prisma.AtLeast<{
@@ -241,6 +243,7 @@ export type UserNestWhereUniqueInput = Prisma.AtLeast<{
   roles?: Prisma.EnumRolesNullableListFilter<"UserNest">
   password?: Prisma.StringNullableFilter<"UserNest"> | string | null
   deleted?: Prisma.BoolFilter<"UserNest"> | boolean
+  tasks?: Prisma.TaskNestListRelationFilter
 }, "id" | "email">
 
 export type UserNestOrderByWithAggregationInput = {
@@ -275,6 +278,7 @@ export type UserNestCreateInput = {
   roles?: Prisma.UserNestCreaterolesInput | $Enums.Roles[]
   password?: string | null
   deleted?: boolean
+  tasks?: Prisma.TaskNestCreateNestedManyWithoutUserInput
 }
 
 export type UserNestUncheckedCreateInput = {
@@ -284,6 +288,7 @@ export type UserNestUncheckedCreateInput = {
   roles?: Prisma.UserNestCreaterolesInput | $Enums.Roles[]
   password?: string | null
   deleted?: boolean
+  tasks?: Prisma.TaskNestUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserNestUpdateInput = {
@@ -292,6 +297,7 @@ export type UserNestUpdateInput = {
   roles?: Prisma.UserNestUpdaterolesInput | $Enums.Roles[]
   password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  tasks?: Prisma.TaskNestUpdateManyWithoutUserNestedInput
 }
 
 export type UserNestUncheckedUpdateInput = {
@@ -301,6 +307,7 @@ export type UserNestUncheckedUpdateInput = {
   roles?: Prisma.UserNestUpdaterolesInput | $Enums.Roles[]
   password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  tasks?: Prisma.TaskNestUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserNestCreateManyInput = {
@@ -370,6 +377,11 @@ export type UserNestSumOrderByAggregateInput = {
   id?: Prisma.SortOrder
 }
 
+export type UserNestScalarRelationFilter = {
+  is?: Prisma.UserNestWhereInput
+  isNot?: Prisma.UserNestWhereInput
+}
+
 export type UserNestCreaterolesInput = {
   set: $Enums.Roles[]
 }
@@ -399,6 +411,99 @@ export type IntFieldUpdateOperationsInput = {
   divide?: number
 }
 
+export type UserNestCreateNestedOneWithoutTasksInput = {
+  create?: Prisma.XOR<Prisma.UserNestCreateWithoutTasksInput, Prisma.UserNestUncheckedCreateWithoutTasksInput>
+  connectOrCreate?: Prisma.UserNestCreateOrConnectWithoutTasksInput
+  connect?: Prisma.UserNestWhereUniqueInput
+}
+
+export type UserNestUpdateOneRequiredWithoutTasksNestedInput = {
+  create?: Prisma.XOR<Prisma.UserNestCreateWithoutTasksInput, Prisma.UserNestUncheckedCreateWithoutTasksInput>
+  connectOrCreate?: Prisma.UserNestCreateOrConnectWithoutTasksInput
+  upsert?: Prisma.UserNestUpsertWithoutTasksInput
+  connect?: Prisma.UserNestWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserNestUpdateToOneWithWhereWithoutTasksInput, Prisma.UserNestUpdateWithoutTasksInput>, Prisma.UserNestUncheckedUpdateWithoutTasksInput>
+}
+
+export type UserNestCreateWithoutTasksInput = {
+  email: string
+  name?: string | null
+  roles?: Prisma.UserNestCreaterolesInput | $Enums.Roles[]
+  password?: string | null
+  deleted?: boolean
+}
+
+export type UserNestUncheckedCreateWithoutTasksInput = {
+  id?: number
+  email: string
+  name?: string | null
+  roles?: Prisma.UserNestCreaterolesInput | $Enums.Roles[]
+  password?: string | null
+  deleted?: boolean
+}
+
+export type UserNestCreateOrConnectWithoutTasksInput = {
+  where: Prisma.UserNestWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserNestCreateWithoutTasksInput, Prisma.UserNestUncheckedCreateWithoutTasksInput>
+}
+
+export type UserNestUpsertWithoutTasksInput = {
+  update: Prisma.XOR<Prisma.UserNestUpdateWithoutTasksInput, Prisma.UserNestUncheckedUpdateWithoutTasksInput>
+  create: Prisma.XOR<Prisma.UserNestCreateWithoutTasksInput, Prisma.UserNestUncheckedCreateWithoutTasksInput>
+  where?: Prisma.UserNestWhereInput
+}
+
+export type UserNestUpdateToOneWithWhereWithoutTasksInput = {
+  where?: Prisma.UserNestWhereInput
+  data: Prisma.XOR<Prisma.UserNestUpdateWithoutTasksInput, Prisma.UserNestUncheckedUpdateWithoutTasksInput>
+}
+
+export type UserNestUpdateWithoutTasksInput = {
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  roles?: Prisma.UserNestUpdaterolesInput | $Enums.Roles[]
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+}
+
+export type UserNestUncheckedUpdateWithoutTasksInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  roles?: Prisma.UserNestUpdaterolesInput | $Enums.Roles[]
+  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  deleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+}
+
+
+/**
+ * Count Type UserNestCountOutputType
+ */
+
+export type UserNestCountOutputType = {
+  tasks: number
+}
+
+export type UserNestCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  tasks?: boolean | UserNestCountOutputTypeCountTasksArgs
+}
+
+/**
+ * UserNestCountOutputType without action
+ */
+export type UserNestCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the UserNestCountOutputType
+   */
+  select?: Prisma.UserNestCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * UserNestCountOutputType without action
+ */
+export type UserNestCountOutputTypeCountTasksArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.TaskNestWhereInput
+}
 
 
 export type UserNestSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -408,6 +513,8 @@ export type UserNestSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   roles?: boolean
   password?: boolean
   deleted?: boolean
+  tasks?: boolean | Prisma.UserNest$tasksArgs<ExtArgs>
+  _count?: boolean | Prisma.UserNestCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["userNest"]>
 
 export type UserNestSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -438,10 +545,18 @@ export type UserNestSelectScalar = {
 }
 
 export type UserNestOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "name" | "roles" | "password" | "deleted", ExtArgs["result"]["userNest"]>
+export type UserNestInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  tasks?: boolean | Prisma.UserNest$tasksArgs<ExtArgs>
+  _count?: boolean | Prisma.UserNestCountOutputTypeDefaultArgs<ExtArgs>
+}
+export type UserNestIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
+export type UserNestIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
 
 export type $UserNestPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "UserNest"
-  objects: {}
+  objects: {
+    tasks: Prisma.$TaskNestPayload<ExtArgs>[]
+  }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
     email: string
@@ -843,6 +958,7 @@ readonly fields: UserNestFieldRefs;
  */
 export interface Prisma__UserNestClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
+  tasks<T extends Prisma.UserNest$tasksArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserNest$tasksArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TaskNestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -895,6 +1011,10 @@ export type UserNestFindUniqueArgs<ExtArgs extends runtime.Types.Extensions.Inte
    */
   omit?: Prisma.UserNestOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserNestInclude<ExtArgs> | null
+  /**
    * Filter, which UserNest to fetch.
    */
   where: Prisma.UserNestWhereUniqueInput
@@ -913,6 +1033,10 @@ export type UserNestFindUniqueOrThrowArgs<ExtArgs extends runtime.Types.Extensio
    */
   omit?: Prisma.UserNestOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserNestInclude<ExtArgs> | null
+  /**
    * Filter, which UserNest to fetch.
    */
   where: Prisma.UserNestWhereUniqueInput
@@ -930,6 +1054,10 @@ export type UserNestFindFirstArgs<ExtArgs extends runtime.Types.Extensions.Inter
    * Omit specific fields from the UserNest
    */
   omit?: Prisma.UserNestOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserNestInclude<ExtArgs> | null
   /**
    * Filter, which UserNest to fetch.
    */
@@ -979,6 +1107,10 @@ export type UserNestFindFirstOrThrowArgs<ExtArgs extends runtime.Types.Extension
    */
   omit?: Prisma.UserNestOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserNestInclude<ExtArgs> | null
+  /**
    * Filter, which UserNest to fetch.
    */
   where?: Prisma.UserNestWhereInput
@@ -1027,6 +1159,10 @@ export type UserNestFindManyArgs<ExtArgs extends runtime.Types.Extensions.Intern
    */
   omit?: Prisma.UserNestOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserNestInclude<ExtArgs> | null
+  /**
    * Filter, which UserNests to fetch.
    */
   where?: Prisma.UserNestWhereInput
@@ -1069,6 +1205,10 @@ export type UserNestCreateArgs<ExtArgs extends runtime.Types.Extensions.Internal
    * Omit specific fields from the UserNest
    */
   omit?: Prisma.UserNestOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserNestInclude<ExtArgs> | null
   /**
    * The data needed to create a UserNest.
    */
@@ -1117,6 +1257,10 @@ export type UserNestUpdateArgs<ExtArgs extends runtime.Types.Extensions.Internal
    * Omit specific fields from the UserNest
    */
   omit?: Prisma.UserNestOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserNestInclude<ExtArgs> | null
   /**
    * The data needed to update a UserNest.
    */
@@ -1184,6 +1328,10 @@ export type UserNestUpsertArgs<ExtArgs extends runtime.Types.Extensions.Internal
    */
   omit?: Prisma.UserNestOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserNestInclude<ExtArgs> | null
+  /**
    * The filter to search for the UserNest to update in case it exists.
    */
   where: Prisma.UserNestWhereUniqueInput
@@ -1210,6 +1358,10 @@ export type UserNestDeleteArgs<ExtArgs extends runtime.Types.Extensions.Internal
    */
   omit?: Prisma.UserNestOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserNestInclude<ExtArgs> | null
+  /**
    * Filter which UserNest to delete.
    */
   where: Prisma.UserNestWhereUniqueInput
@@ -1230,6 +1382,30 @@ export type UserNestDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Inte
 }
 
 /**
+ * UserNest.tasks
+ */
+export type UserNest$tasksArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the TaskNest
+   */
+  select?: Prisma.TaskNestSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the TaskNest
+   */
+  omit?: Prisma.TaskNestOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.TaskNestInclude<ExtArgs> | null
+  where?: Prisma.TaskNestWhereInput
+  orderBy?: Prisma.TaskNestOrderByWithRelationInput | Prisma.TaskNestOrderByWithRelationInput[]
+  cursor?: Prisma.TaskNestWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.TaskNestScalarFieldEnum | Prisma.TaskNestScalarFieldEnum[]
+}
+
+/**
  * UserNest without action
  */
 export type UserNestDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1241,4 +1417,8 @@ export type UserNestDefaultArgs<ExtArgs extends runtime.Types.Extensions.Interna
    * Omit specific fields from the UserNest
    */
   omit?: Prisma.UserNestOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserNestInclude<ExtArgs> | null
 }

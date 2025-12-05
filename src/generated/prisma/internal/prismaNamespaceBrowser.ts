@@ -51,7 +51,8 @@ export const AnyNull = runtime.AnyNull
 
 
 export const ModelName = {
-  UserNest: 'UserNest'
+  UserNest: 'UserNest',
+  TaskNest: 'TaskNest'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -80,6 +81,18 @@ export const UserNestScalarFieldEnum = {
 } as const
 
 export type UserNestScalarFieldEnum = (typeof UserNestScalarFieldEnum)[keyof typeof UserNestScalarFieldEnum]
+
+
+export const TaskNestScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  created: 'created',
+  updated: 'updated',
+  title: 'title',
+  text: 'text'
+} as const
+
+export type TaskNestScalarFieldEnum = (typeof TaskNestScalarFieldEnum)[keyof typeof TaskNestScalarFieldEnum]
 
 
 export const SortOrder = {

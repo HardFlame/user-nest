@@ -15,9 +15,20 @@ model UserNest {
   roles  Roles[] @default([USER])
   password  String?
   deleted Boolean @default(false)
+  tasks TaskNest[]
 }
 
 enum Roles {
   USER
   ADMIN
+}
+
+model TaskNest {
+  id    Int     @id @default(autoincrement())
+  userId Int
+  user UserNest @relation(fields: [userId], references: [id])
+  created DateTime @default(now())
+  updated DateTime @default(now())
+  title String
+  text String
 }

@@ -1,0 +1,11 @@
+-- CreateTable
+CREATE TABLE "TaskNest" (
+    "id" SERIAL NOT NULL,
+    "userId" INTEGER NOT NULL,
+    "created" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "title" TEXT NOT NULL,
+    "text" TEXT NOT NULL,
+
+    CONSTRAINT "TaskNest_pkey" PRIMARY KEY ("id")
+);

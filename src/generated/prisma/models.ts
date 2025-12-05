@@ -9,4 +9,5 @@
  * 🟢 You can import this file directly.
  */
 export type * from './models/UserNest.js'
+export type * from './models/TaskNest.js'
 export type * from './commonInputTypes.js'

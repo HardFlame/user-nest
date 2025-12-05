@@ -1,0 +1,2 @@
+-- AddForeignKey
+ALTER TABLE "TaskNest" ADD CONSTRAINT "TaskNest_userId_fkey" FOREIGN KEY ("userId") REFERENCES "UserNest"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
