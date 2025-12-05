@@ -6,12 +6,13 @@ import {
   HttpStatus,
   Post,
   Request,
-  UseGuards,
+  // UseGuards,
 } from '@nestjs/common';
 
-import { JwtAuthGuard } from './jwt-auth.guard';
+// import { JwtAuthGuard } from './jwt-auth.guard';
 import { type UserNestCreateInput } from 'src/generated/prisma/models';
 import { AuthService } from './auth.service';
+import { Public } from './auth.decorator';
 
 @Controller('auth')
 export class AuthController {
@@ -26,6 +27,7 @@ export class AuthController {
     return result;
   }
 
+  @Public()
   @Post('login')
   async login(@Body() body: { email: string; password: string }) {
     return this.authService.login({
@@ -34,7 +36,6 @@ export class AuthController {
     });
   }
 
-  @UseGuards(JwtAuthGuard)
   @Get('profile')
   getProfile(@Request() req: any) {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-member-access

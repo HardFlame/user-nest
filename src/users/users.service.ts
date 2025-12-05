@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { Role, Roles } from 'src/auth/auth.decorator';
 import { DatabaseService } from 'src/database/database.service';
 import { Prisma } from 'src/generated/prisma/client';
 
@@ -42,9 +43,11 @@ export class UsersService {
       where,
     });
   }
-
+  @Roles(Role.ADMIN)
   async deleteUser(where: Prisma.UserNestWhereUniqueInput) {
-    return this.database.userNest.delete({
+    const data = { deleted: true };
+    return this.database.userNest.update({
+      data,
       where,
     });
   }

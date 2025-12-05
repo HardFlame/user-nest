@@ -12,6 +12,12 @@ model UserNest {
   id    Int     @id @default(autoincrement())
   email String  @unique
   name  String?
-  role  String?
+  roles  Roles[] @default([USER])
   password  String?
+  deleted Boolean @default(false)
+}
+
+enum Roles {
+  USER
+  ADMIN
 }
