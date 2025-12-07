@@ -45,21 +45,23 @@ describe('UsersController', () => {
     );
   });
 
-  it('getAllUsers calls users service with deleted:false', async () => {
+  it('getUserByQuery without params calls users service with deleted:false', async () => {
     mockUsersService.users.mockResolvedValue([]);
-    await expect(controller.getAllUsers()).resolves.toEqual([]);
+    await expect(controller.getUserByQuery()).resolves.toEqual([]);
     expect(mockUsersService.users).toHaveBeenCalledWith({
       where: { deleted: false },
     });
   });
 
-  it('getUserById converts id to number and calls user()', async () => {
-    mockUsersService.user.mockResolvedValue({ id: 2 });
-    await expect(controller.getUserById('2')).resolves.toEqual({ id: 2 });
-    expect(mockUsersService.user).toHaveBeenCalledWith({ id: 2 });
+  it('getUserByQuery with id returns user by id', async () => {
+    mockUsersService.users.mockResolvedValue([{ id: 2, email: 'test' }]);
+    await controller.getUserByQuery('2');
+    expect(mockUsersService.users).toHaveBeenCalledWith({
+      where: { deleted: false, id: 2 },
+    });
   });
 
-  it('getTasksByUserId calls tasksService.tasks', async () => {
+  it('getTasksByUserId calls tasksService.tasks with userId filter', async () => {
     mockTasksService.tasks.mockResolvedValue(['t1']);
     await expect(controller.getTasksByUserId('3')).resolves.toEqual(['t1']);
     expect(mockTasksService.tasks).toHaveBeenCalledWith({
@@ -67,9 +69,43 @@ describe('UsersController', () => {
     });
   });
 
-  it('update calls updateUser with numeric id', () => {
+  it('getUserByQuery merges custom where with deleted:false', async () => {
+    mockUsersService.users.mockResolvedValue([]);
+    await controller.getUserByQuery(undefined, '{"email":"test@example.com"}');
+    expect(mockUsersService.users).toHaveBeenCalledWith({
+      where: { deleted: false, AND: { email: 'test@example.com' } },
+    });
+  });
+
+  it('getUserByQuery applies skip, take, and orderBy', async () => {
+    mockUsersService.users.mockResolvedValue([]);
+    await controller.getUserByQuery(
+      undefined,
+      undefined,
+      '5',
+      '10',
+      '{"id":"desc"}',
+    );
+    expect(mockUsersService.users).toHaveBeenCalledWith({
+      where: { deleted: false },
+      skip: 5,
+      take: 10,
+      orderBy: { id: 'desc' },
+    });
+  });
+
+  it('getUserByQuery ignores invalid where JSON', async () => {
+    mockUsersService.users.mockResolvedValue([]);
+    await controller.getUserByQuery(undefined, 'invalid-json');
+    expect(mockUsersService.users).toHaveBeenCalledWith({
+      where: { deleted: false },
+    });
+  });
+
+  it('update calls updateUser with numeric id', async () => {
     const dto: any = { name: 'x' };
-    controller.update('4', dto);
+    mockUsersService.updateUser.mockResolvedValue({ id: 4, ...dto });
+    await controller.update('4', dto);
     expect(mockUsersService.updateUser).toHaveBeenCalledWith({
       where: { id: 4 },
       data: dto,
