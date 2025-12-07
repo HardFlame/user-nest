@@ -1,10 +1,18 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { DatabaseService } from 'src/database/database.service';
 import { Prisma } from 'src/generated/prisma/client';
-
+import bcrypt from 'bcrypt';
 @Injectable()
 export class UsersService {
   constructor(private database: DatabaseService) {}
+
+  async hashData(data: string) {
+    const passSalt = await bcrypt.genSalt(10); //process.env.PASS_SALT;
+    if (!passSalt) {
+      throw new Error('PASS_SALT environment variable is not set');
+    }
+    return await bcrypt.hash(data, passSalt);
+  }
 
   async user(UserNestWhereInput: Prisma.UserNestWhereUniqueInput) {
     return this.database.userNest.findUnique({
@@ -29,15 +37,22 @@ export class UsersService {
     });
   }
   async createUser(dto: Prisma.UserNestCreateInput) {
+    if (dto.password) {
+      dto.password = await this.hashData(dto.password);
+    }
     return this.database.userNest.create({ data: dto });
   }
 
   async updateUser(params: {
     where: Prisma.UserNestWhereUniqueInput;
-    data: Prisma.UserNestUpdateInput;
+    data: Prisma.UserNestUncheckedUpdateInput;
   }) {
     const { where, data } = params;
-
+    if (typeof data.password === 'string') {
+      data.password = await this.hashData(data.password);
+    } else if (data.password) {
+      throw new HttpException('password is incorrect', HttpStatus.BAD_GATEWAY);
+    }
     return this.database.userNest.update({
       data,
       where,

@@ -6,6 +6,7 @@ import {
   HttpStatus,
   Post,
   Request,
+  UseGuards,
   // UseGuards,
 } from '@nestjs/common';
 
@@ -13,11 +14,14 @@ import {
 import { type UserNestCreateInput } from 'src/generated/prisma/models';
 import { AuthService } from './auth.service';
 import { Public } from './auth.decorator';
+import { type Request as RequestType } from 'express';
+import { RefreshTokenGuard } from './refreshToken.guard';
 
 @Controller('auth')
 export class AuthController {
   constructor(private authService: AuthService) {}
 
+  @Public()
   @Post('register')
   async register(@Body() createUserDto: UserNestCreateInput) {
     const result = await this.authService.register(createUserDto);
@@ -37,8 +41,29 @@ export class AuthController {
   }
 
   @Get('profile')
-  getProfile(@Request() req: any) {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-member-access
-    return req.user;
+  getProfile(@Request() req: RequestType) {
+    const user = req.user as { email: string; id: number };
+    return user;
+  }
+
+  @Get('logout')
+  logout(@Request() req: RequestType) {
+    const user = req.user as { id: number | string };
+    if (!user.id) {
+      throw new HttpException('Auth Error', HttpStatus.BAD_REQUEST);
+    }
+    return this.authService.logout(+user.id);
+  }
+
+  @Public()
+  @UseGuards(RefreshTokenGuard)
+  @Get('refresh')
+  refreshTokens(@Request() req: RequestType) {
+    const user = req.user as { id: number | string; refreshToken: string };
+    if (!user.id) {
+      throw new HttpException('Auth Error', HttpStatus.BAD_REQUEST);
+    }
+    const refreshToken = user.refreshToken;
+    return this.authService.refreshTokens(+user.id, refreshToken);
   }
 }

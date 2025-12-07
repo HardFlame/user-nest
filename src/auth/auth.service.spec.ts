@@ -1,8 +1,10 @@
+/* eslint-disable @typescript-eslint/no-require-imports */
 /* eslint-disable @typescript-eslint/no-unnecessary-type-assertion */
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 // Mock path-alias imports used by the service implementation
+require('dotenv').config({ path: '.env' });
 jest.mock('src/users/users.service', () => ({ UsersService: class {} }), {
   virtual: true,
 });
@@ -12,8 +14,15 @@ import { AuthService } from './auth.service';
 
 describe('AuthService', () => {
   let service: AuthService;
-  const mockUsersService: any = { user: jest.fn(), createUser: jest.fn() };
-  const mockJwtService: any = { sign: jest.fn().mockReturnValue('token') };
+  const mockUsersService: any = {
+    user: jest.fn(),
+    createUser: jest.fn(),
+    updateUser: jest.fn(),
+  };
+  const mockJwtService: any = {
+    sign: jest.fn().mockReturnValue('token'),
+    signAsync: jest.fn().mockReturnValue('token'),
+  };
 
   beforeEach(() => {
     jest.clearAllMocks();
@@ -49,6 +58,6 @@ describe('AuthService', () => {
     mockJwtService.sign.mockReturnValue('signed');
     await expect(
       service.login({ email: 'b', password: 'b' }),
-    ).resolves.toMatchObject({ email: 'b', accessToken: 'signed' });
+    ).resolves.toMatchObject({ email: 'b', accessToken: 'token' });
   });
 });

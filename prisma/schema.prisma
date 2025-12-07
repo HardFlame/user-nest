@@ -16,6 +16,7 @@ model UserNest {
   password  String?
   deleted Boolean @default(false)
   tasks TaskNest[]
+  refreshToken String?
 }
 
 enum Roles {

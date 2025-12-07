@@ -40,6 +40,7 @@ export type UserNestMinAggregateOutputType = {
   name: string | null
   password: string | null
   deleted: boolean | null
+  refreshToken: string | null
 }
 
 export type UserNestMaxAggregateOutputType = {
@@ -48,6 +49,7 @@ export type UserNestMaxAggregateOutputType = {
   name: string | null
   password: string | null
   deleted: boolean | null
+  refreshToken: string | null
 }
 
 export type UserNestCountAggregateOutputType = {
@@ -57,6 +59,7 @@ export type UserNestCountAggregateOutputType = {
   roles: number
   password: number
   deleted: number
+  refreshToken: number
   _all: number
 }
 
@@ -75,6 +78,7 @@ export type UserNestMinAggregateInputType = {
   name?: true
   password?: true
   deleted?: true
+  refreshToken?: true
 }
 
 export type UserNestMaxAggregateInputType = {
@@ -83,6 +87,7 @@ export type UserNestMaxAggregateInputType = {
   name?: true
   password?: true
   deleted?: true
+  refreshToken?: true
 }
 
 export type UserNestCountAggregateInputType = {
@@ -92,6 +97,7 @@ export type UserNestCountAggregateInputType = {
   roles?: true
   password?: true
   deleted?: true
+  refreshToken?: true
   _all?: true
 }
 
@@ -188,6 +194,7 @@ export type UserNestGroupByOutputType = {
   roles: $Enums.Roles[]
   password: string | null
   deleted: boolean
+  refreshToken: string | null
   _count: UserNestCountAggregateOutputType | null
   _avg: UserNestAvgAggregateOutputType | null
   _sum: UserNestSumAggregateOutputType | null
@@ -220,6 +227,7 @@ export type UserNestWhereInput = {
   roles?: Prisma.EnumRolesNullableListFilter<"UserNest">
   password?: Prisma.StringNullableFilter<"UserNest"> | string | null
   deleted?: Prisma.BoolFilter<"UserNest"> | boolean
+  refreshToken?: Prisma.StringNullableFilter<"UserNest"> | string | null
   tasks?: Prisma.TaskNestListRelationFilter
 }
 
@@ -230,6 +238,7 @@ export type UserNestOrderByWithRelationInput = {
   roles?: Prisma.SortOrder
   password?: Prisma.SortOrderInput | Prisma.SortOrder
   deleted?: Prisma.SortOrder
+  refreshToken?: Prisma.SortOrderInput | Prisma.SortOrder
   tasks?: Prisma.TaskNestOrderByRelationAggregateInput
 }
 
@@ -243,6 +252,7 @@ export type UserNestWhereUniqueInput = Prisma.AtLeast<{
   roles?: Prisma.EnumRolesNullableListFilter<"UserNest">
   password?: Prisma.StringNullableFilter<"UserNest"> | string | null
   deleted?: Prisma.BoolFilter<"UserNest"> | boolean
+  refreshToken?: Prisma.StringNullableFilter<"UserNest"> | string | null
   tasks?: Prisma.TaskNestListRelationFilter
 }, "id" | "email">
 
@@ -253,6 +263,7 @@ export type UserNestOrderByWithAggregationInput = {
   roles?: Prisma.SortOrder
   password?: Prisma.SortOrderInput | Prisma.SortOrder
   deleted?: Prisma.SortOrder
+  refreshToken?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.UserNestCountOrderByAggregateInput
   _avg?: Prisma.UserNestAvgOrderByAggregateInput
   _max?: Prisma.UserNestMaxOrderByAggregateInput
@@ -270,6 +281,7 @@ export type UserNestScalarWhereWithAggregatesInput = {
   roles?: Prisma.EnumRolesNullableListFilter<"UserNest">
   password?: Prisma.StringNullableWithAggregatesFilter<"UserNest"> | string | null
   deleted?: Prisma.BoolWithAggregatesFilter<"UserNest"> | boolean
+  refreshToken?: Prisma.StringNullableWithAggregatesFilter<"UserNest"> | string | null
 }
 
 export type UserNestCreateInput = {
@@ -278,6 +290,7 @@ export type UserNestCreateInput = {
   roles?: Prisma.UserNestCreaterolesInput | $Enums.Roles[]
   password?: string | null
   deleted?: boolean
+  refreshToken?: string | null
   tasks?: Prisma.TaskNestCreateNestedManyWithoutUserInput
 }
 
@@ -288,6 +301,7 @@ export type UserNestUncheckedCreateInput = {
   roles?: Prisma.UserNestCreaterolesInput | $Enums.Roles[]
   password?: string | null
   deleted?: boolean
+  refreshToken?: string | null
   tasks?: Prisma.TaskNestUncheckedCreateNestedManyWithoutUserInput
 }
 
@@ -297,6 +311,7 @@ export type UserNestUpdateInput = {
   roles?: Prisma.UserNestUpdaterolesInput | $Enums.Roles[]
   password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  refreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tasks?: Prisma.TaskNestUpdateManyWithoutUserNestedInput
 }
 
@@ -307,6 +322,7 @@ export type UserNestUncheckedUpdateInput = {
   roles?: Prisma.UserNestUpdaterolesInput | $Enums.Roles[]
   password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  refreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tasks?: Prisma.TaskNestUncheckedUpdateManyWithoutUserNestedInput
 }
 
@@ -317,6 +333,7 @@ export type UserNestCreateManyInput = {
   roles?: Prisma.UserNestCreaterolesInput | $Enums.Roles[]
   password?: string | null
   deleted?: boolean
+  refreshToken?: string | null
 }
 
 export type UserNestUpdateManyMutationInput = {
@@ -325,6 +342,7 @@ export type UserNestUpdateManyMutationInput = {
   roles?: Prisma.UserNestUpdaterolesInput | $Enums.Roles[]
   password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  refreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type UserNestUncheckedUpdateManyInput = {
@@ -334,6 +352,7 @@ export type UserNestUncheckedUpdateManyInput = {
   roles?: Prisma.UserNestUpdaterolesInput | $Enums.Roles[]
   password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  refreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type EnumRolesNullableListFilter<$PrismaModel = never> = {
@@ -351,6 +370,7 @@ export type UserNestCountOrderByAggregateInput = {
   roles?: Prisma.SortOrder
   password?: Prisma.SortOrder
   deleted?: Prisma.SortOrder
+  refreshToken?: Prisma.SortOrder
 }
 
 export type UserNestAvgOrderByAggregateInput = {
@@ -363,6 +383,7 @@ export type UserNestMaxOrderByAggregateInput = {
   name?: Prisma.SortOrder
   password?: Prisma.SortOrder
   deleted?: Prisma.SortOrder
+  refreshToken?: Prisma.SortOrder
 }
 
 export type UserNestMinOrderByAggregateInput = {
@@ -371,6 +392,7 @@ export type UserNestMinOrderByAggregateInput = {
   name?: Prisma.SortOrder
   password?: Prisma.SortOrder
   deleted?: Prisma.SortOrder
+  refreshToken?: Prisma.SortOrder
 }
 
 export type UserNestSumOrderByAggregateInput = {
@@ -431,6 +453,7 @@ export type UserNestCreateWithoutTasksInput = {
   roles?: Prisma.UserNestCreaterolesInput | $Enums.Roles[]
   password?: string | null
   deleted?: boolean
+  refreshToken?: string | null
 }
 
 export type UserNestUncheckedCreateWithoutTasksInput = {
@@ -440,6 +463,7 @@ export type UserNestUncheckedCreateWithoutTasksInput = {
   roles?: Prisma.UserNestCreaterolesInput | $Enums.Roles[]
   password?: string | null
   deleted?: boolean
+  refreshToken?: string | null
 }
 
 export type UserNestCreateOrConnectWithoutTasksInput = {
@@ -464,6 +488,7 @@ export type UserNestUpdateWithoutTasksInput = {
   roles?: Prisma.UserNestUpdaterolesInput | $Enums.Roles[]
   password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  refreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type UserNestUncheckedUpdateWithoutTasksInput = {
@@ -473,6 +498,7 @@ export type UserNestUncheckedUpdateWithoutTasksInput = {
   roles?: Prisma.UserNestUpdaterolesInput | $Enums.Roles[]
   password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   deleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  refreshToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 
@@ -513,6 +539,7 @@ export type UserNestSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   roles?: boolean
   password?: boolean
   deleted?: boolean
+  refreshToken?: boolean
   tasks?: boolean | Prisma.UserNest$tasksArgs<ExtArgs>
   _count?: boolean | Prisma.UserNestCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["userNest"]>
@@ -524,6 +551,7 @@ export type UserNestSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exte
   roles?: boolean
   password?: boolean
   deleted?: boolean
+  refreshToken?: boolean
 }, ExtArgs["result"]["userNest"]>
 
 export type UserNestSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -533,6 +561,7 @@ export type UserNestSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exte
   roles?: boolean
   password?: boolean
   deleted?: boolean
+  refreshToken?: boolean
 }, ExtArgs["result"]["userNest"]>
 
 export type UserNestSelectScalar = {
@@ -542,9 +571,10 @@ export type UserNestSelectScalar = {
   roles?: boolean
   password?: boolean
   deleted?: boolean
+  refreshToken?: boolean
 }
 
-export type UserNestOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "name" | "roles" | "password" | "deleted", ExtArgs["result"]["userNest"]>
+export type UserNestOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "name" | "roles" | "password" | "deleted" | "refreshToken", ExtArgs["result"]["userNest"]>
 export type UserNestInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   tasks?: boolean | Prisma.UserNest$tasksArgs<ExtArgs>
   _count?: boolean | Prisma.UserNestCountOutputTypeDefaultArgs<ExtArgs>
@@ -564,6 +594,7 @@ export type $UserNestPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     roles: $Enums.Roles[]
     password: string | null
     deleted: boolean
+    refreshToken: string | null
   }, ExtArgs["result"]["userNest"]>
   composites: {}
 }
@@ -994,6 +1025,7 @@ export interface UserNestFieldRefs {
   readonly roles: Prisma.FieldRef<"UserNest", 'Roles[]'>
   readonly password: Prisma.FieldRef<"UserNest", 'String'>
   readonly deleted: Prisma.FieldRef<"UserNest", 'Boolean'>
+  readonly refreshToken: Prisma.FieldRef<"UserNest", 'String'>
 }
     
 

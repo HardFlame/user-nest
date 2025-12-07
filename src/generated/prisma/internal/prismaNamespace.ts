@@ -598,7 +598,8 @@ export const UserNestScalarFieldEnum = {
   name: 'name',
   roles: 'roles',
   password: 'password',
-  deleted: 'deleted'
+  deleted: 'deleted',
+  refreshToken: 'refreshToken'
 } as const
 
 export type UserNestScalarFieldEnum = (typeof UserNestScalarFieldEnum)[keyof typeof UserNestScalarFieldEnum]
