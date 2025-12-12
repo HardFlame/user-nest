@@ -9,8 +9,8 @@ import {
   Request,
 } from '@nestjs/common';
 import { TasksService } from './task.service';
-import { type TaskNest } from 'src/generated/prisma/client';
-import { Public, Role, Roles } from 'src/auth/auth.decorator';
+import { type TaskNest } from '../generated/prisma/client';
+import { Public, Role, Roles } from '../decorators/auth.decorator';
 
 @Controller('tasks')
 export class TasksController {

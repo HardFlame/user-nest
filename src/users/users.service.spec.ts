@@ -42,9 +42,9 @@ describe('UsersService', () => {
   it('returns users from users()', async () => {
     const expected = [{ id: 1 }];
     mockDb.userNest.findMany.mockResolvedValue(expected);
-    await expect(service.users({ where: { deleted: false } })).resolves.toEqual(
-      expected,
-    );
+    await expect(
+      service.users({ where: '{ deleted: false }' }),
+    ).resolves.toEqual(expected);
     expect(mockDb.userNest.findMany).toHaveBeenCalledWith({
       skip: undefined,
       take: undefined,

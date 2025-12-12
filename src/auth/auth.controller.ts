@@ -13,9 +13,9 @@ import {
 // import { JwtAuthGuard } from './jwt-auth.guard';
 import { type UserNestCreateInput } from 'src/generated/prisma/models';
 import { AuthService } from './auth.service';
-import { Public } from './auth.decorator';
+import { Public } from '../decorators/auth.decorator';
 import { type Request as RequestType } from 'express';
-import { RefreshTokenGuard } from './refreshToken.guard';
+import { RefreshTokenGuard } from '../jwt/refreshToken.guard';
 
 @Controller('auth')
 export class AuthController {
@@ -50,7 +50,7 @@ export class AuthController {
   logout(@Request() req: RequestType) {
     const user = req.user as { id: number | string };
     if (!user.id) {
-      throw new HttpException('Auth Error', HttpStatus.BAD_REQUEST);
+      throw new HttpException('Auth Error', HttpStatus.UNAUTHORIZED);
     }
     return this.authService.logout(+user.id);
   }
@@ -61,7 +61,7 @@ export class AuthController {
   refreshTokens(@Request() req: RequestType) {
     const user = req.user as { id: number | string; refreshToken: string };
     if (!user.id) {
-      throw new HttpException('Auth Error', HttpStatus.BAD_REQUEST);
+      throw new HttpException('Auth Error', HttpStatus.UNAUTHORIZED);
     }
     const refreshToken = user.refreshToken;
     return this.authService.refreshTokens(+user.id, refreshToken);

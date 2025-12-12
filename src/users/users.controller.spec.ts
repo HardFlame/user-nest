@@ -33,73 +33,10 @@ describe('UsersController', () => {
     updateUser: jest.fn(),
     deleteUser: jest.fn(),
   };
-  const mockTasksService: any = {
-    tasks: jest.fn(),
-  };
 
   beforeEach(() => {
     jest.clearAllMocks();
-    controller = new UsersController(
-      mockUsersService as any,
-      mockTasksService as any,
-    );
-  });
-
-  it('getUserByQuery without params calls users service with deleted:false', async () => {
-    mockUsersService.users.mockResolvedValue([]);
-    await expect(controller.getUserByQuery()).resolves.toEqual([]);
-    expect(mockUsersService.users).toHaveBeenCalledWith({
-      where: { deleted: false },
-    });
-  });
-
-  it('getUserByQuery with id returns user by id', async () => {
-    mockUsersService.users.mockResolvedValue([{ id: 2, email: 'test' }]);
-    await controller.getUserByQuery('2');
-    expect(mockUsersService.users).toHaveBeenCalledWith({
-      where: { deleted: false, id: 2 },
-    });
-  });
-
-  it('getTasksByUserId calls tasksService.tasks with userId filter', async () => {
-    mockTasksService.tasks.mockResolvedValue(['t1']);
-    await expect(controller.getTasksByUserId('3')).resolves.toEqual(['t1']);
-    expect(mockTasksService.tasks).toHaveBeenCalledWith({
-      where: { userId: 3 },
-    });
-  });
-
-  it('getUserByQuery merges custom where with deleted:false', async () => {
-    mockUsersService.users.mockResolvedValue([]);
-    await controller.getUserByQuery(undefined, '{"email":"test@example.com"}');
-    expect(mockUsersService.users).toHaveBeenCalledWith({
-      where: { deleted: false, AND: { email: 'test@example.com' } },
-    });
-  });
-
-  it('getUserByQuery applies skip, take, and orderBy', async () => {
-    mockUsersService.users.mockResolvedValue([]);
-    await controller.getUserByQuery(
-      undefined,
-      undefined,
-      '5',
-      '10',
-      '{"id":"desc"}',
-    );
-    expect(mockUsersService.users).toHaveBeenCalledWith({
-      where: { deleted: false },
-      skip: 5,
-      take: 10,
-      orderBy: { id: 'desc' },
-    });
-  });
-
-  it('getUserByQuery ignores invalid where JSON', async () => {
-    mockUsersService.users.mockResolvedValue([]);
-    await controller.getUserByQuery(undefined, 'invalid-json');
-    expect(mockUsersService.users).toHaveBeenCalledWith({
-      where: { deleted: false },
-    });
+    controller = new UsersController(mockUsersService as any);
   });
 
   it('update calls updateUser with numeric id', async () => {

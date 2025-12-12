@@ -1,7 +1,10 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { DatabaseService } from 'src/database/database.service';
 import { Prisma } from 'src/generated/prisma/client';
-import { TaskNestUncheckedCreateInput, TaskNestUncheckedUpdateInput } from 'src/generated/prisma/models';
+import {
+  TaskNestUncheckedCreateInput,
+  TaskNestUncheckedUpdateInput,
+} from 'src/generated/prisma/models';
 
 @Injectable()
 export class TasksService {

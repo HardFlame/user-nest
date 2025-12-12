@@ -8,6 +8,8 @@ import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
 import { TasksService } from './tasks/task.service';
 import { TasksController } from './tasks/task.controller';
+import { UsersModule } from './users/users.module';
+import { TasksModule } from './tasks/task.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -15,6 +17,8 @@ import { TasksController } from './tasks/task.controller';
     }),
     DatabaseModule,
     AuthModule,
+    UsersModule,
+    TasksModule,
   ],
   controllers: [AppController, UsersController, TasksController],
   providers: [AppService, UsersService, TasksService],

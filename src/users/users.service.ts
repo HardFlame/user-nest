@@ -20,21 +20,71 @@ export class UsersService {
     });
   }
 
-  async users(params: {
-    skip?: number;
-    take?: number;
-    cursor?: Prisma.UserNestWhereUniqueInput;
-    where?: Prisma.UserNestWhereInput;
-    orderBy?: Prisma.UserNestOrderByWithRelationInput;
+  async users(rawQuery: {
+    skip?: string;
+    take?: string;
+    cursor?: string;
+    where?: string;
+    orderBy?: string;
   }) {
-    const { skip, take, cursor, where, orderBy } = params;
-    return this.database.userNest.findMany({
-      skip,
-      take,
-      cursor,
-      where,
-      orderBy,
-    });
+    const query: {
+      skip?: number;
+      take?: number;
+      cursor?: Prisma.UserNestWhereUniqueInput;
+      where?: Prisma.UserNestWhereInput;
+      orderBy?: Prisma.UserNestOrderByWithRelationInput;
+    } = { where: { deleted: false } };
+    //console.log(rawQuery);
+
+    if (rawQuery.where) {
+      try {
+        const customWhere = JSON.parse(
+          rawQuery.where,
+        ) as Prisma.UserNestWhereInput;
+        query.where = {
+          ...query.where,
+          AND: {
+            ...customWhere,
+          },
+        };
+      } catch {
+        // Ignore invalid JSON, use default where clause
+      }
+    }
+
+    if (rawQuery.skip) {
+      const skipNum = parseInt(rawQuery.skip, 10);
+      if (!isNaN(skipNum) && skipNum >= 0) {
+        query.skip = skipNum;
+      }
+    }
+
+    if (rawQuery.take) {
+      const takeNum = parseInt(rawQuery.take, 10);
+      if (!isNaN(takeNum) && takeNum > 0) {
+        query.take = takeNum;
+      }
+    }
+
+    if (rawQuery.orderBy) {
+      try {
+        query.orderBy = JSON.parse(
+          rawQuery.orderBy,
+        ) as Prisma.UserNestOrderByWithRelationInput;
+      } catch {
+        // Ignore invalid JSON, no ordering applied
+      }
+    }
+    console.log(query);
+    try {
+      return this.database.userNest.findMany(query);
+    } catch (error) {
+      console.log(error);
+      throw new HttpException(
+        'something wrong with query',
+        HttpStatus.NO_CONTENT,
+      );
+    }
   }
   async createUser(dto: Prisma.UserNestCreateInput) {
     if (dto.password) {
@@ -51,7 +101,7 @@ export class UsersService {
     if (typeof data.password === 'string') {
       data.password = await this.hashData(data.password);
     } else if (data.password) {
-      throw new HttpException('password is incorrect', HttpStatus.BAD_GATEWAY);
+      throw new HttpException('password is incorrect', HttpStatus.UNAUTHORIZED);
     }
     return this.database.userNest.update({
       data,

@@ -5,11 +5,11 @@ import { UsersModule } from 'src/users/users.module';
 import { JwtModule } from '@nestjs/jwt';
 // import { PassportModule } from '@nestjs/passport';
 import { AuthController } from './auth.controller';
-import { JwtStrategy } from './jwt.strategy';
+import { JwtStrategy } from '../jwt/jwt.strategy';
 import { APP_GUARD } from '@nestjs/core';
-import { JwtAuthGuard } from './jwt-auth.guard';
+import { JwtAuthGuard } from '../jwt/jwt-auth.guard';
 // import { type StringValue } from 'ms';
-import { JwtRefreshStrategy } from './refreshToken.strategy';
+import { JwtRefreshStrategy } from '../jwt/refreshToken.strategy';
 
 @Module({
   imports: [
