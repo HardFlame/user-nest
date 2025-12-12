@@ -1,10 +1,14 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { DatabaseService } from 'src/database/database.service';
-import { Prisma } from 'src/generated/prisma/client';
+import { Prisma, Roles } from 'src/generated/prisma/client';
 import {
+  TaskNestOrderByWithRelationInput,
   TaskNestUncheckedCreateInput,
   TaskNestUncheckedUpdateInput,
+  TaskNestWhereInput,
+  TaskNestWhereUniqueInput,
 } from 'src/generated/prisma/models';
+import { type Request as RequestType } from 'express';
 
 @Injectable()
 export class TasksService {
@@ -19,9 +23,9 @@ export class TasksService {
   async tasks(params: {
     skip?: number;
     take?: number;
-    cursor?: Prisma.TaskNestWhereUniqueInput;
-    where?: Prisma.TaskNestWhereInput;
-    orderBy?: Prisma.TaskNestOrderByWithRelationInput;
+    cursor?: TaskNestWhereUniqueInput;
+    where?: TaskNestWhereInput;
+    orderBy?: TaskNestOrderByWithRelationInput;
   }) {
     const { skip, take, cursor, where, orderBy } = params;
     return this.database.taskNest.findMany({
@@ -36,20 +40,35 @@ export class TasksService {
     dto: TaskNestUncheckedCreateInput,
     { user }: { user: { email: string; id: string } },
   ) {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { created, updated, ...filteredDto } = dto;
     if (!user?.id) {
-      throw new HttpException('', HttpStatus.UNAUTHORIZED);
+      throw new UnauthorizedException();
     }
     dto.userId = +user.id;
     return this.database.taskNest.create({
-      data: dto,
+      data: filteredDto,
     });
   }
 
   async updateTask(params: {
     where: Prisma.TaskNestWhereUniqueInput;
     data: TaskNestUncheckedUpdateInput;
+    req: RequestType;
   }) {
-    const { where, data } = params;
+    const { where, data, req } = params;
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { created, ...filteredDto } = data;
+    const user = req.user as { id: string; email: string; roles: Roles[] };
+    if (!user.id) {
+      throw new UnauthorizedException();
+    }
+    if (!user.roles.some((role) => role === 'ADMIN')) {
+      where['AND'] = {
+        userId: +user.id,
+      };
+    }
+    filteredDto.updated = new Date();
     return this.database.taskNest.update({
       data,
       where,

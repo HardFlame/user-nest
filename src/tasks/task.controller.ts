@@ -13,6 +13,7 @@ import { TasksService } from './task.service';
 import { type TaskNest } from '../generated/prisma/client';
 import { Role, Roles } from '../decorators/auth.decorator';
 import { JwtAuthGuard } from 'src/jwt/jwt-auth.guard';
+import { type Request as RequestType } from 'express';
 
 @Controller('tasks')
 export class TasksController {
@@ -38,9 +39,7 @@ export class TasksController {
     @Body() createTaskDto: TaskNest,
     @Request() request: { user: { email: string; id: string } },
   ) {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { created, updated, ...filteredDto } = createTaskDto;
-    return this.tasksService.createTask(filteredDto, request);
+    return this.tasksService.createTask(createTaskDto, request);
   }
 
   @UseGuards(JwtAuthGuard)
@@ -48,19 +47,14 @@ export class TasksController {
   update(
     @Param('id') id: string,
     @Body() updateTaskDto: TaskNest,
-    @Request() request: { user: { email: string; id: string } },
+    @Request() req: RequestType,
   ) {
-    updateTaskDto.updated = new Date();
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { created, ...filteredDto } = updateTaskDto;
     return this.tasksService.updateTask({
       where: {
         id: +id,
-        AND: {
-          userId: +request.user.id,
-        },
       },
-      data: filteredDto,
+      data: updateTaskDto,
+      req,
     });
   }
 
