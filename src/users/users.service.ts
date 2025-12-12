@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
 import { DatabaseService } from 'src/database/database.service';
 import bcrypt from 'bcrypt';
 import {
@@ -10,6 +10,8 @@ import {
 } from 'src/generated/prisma/models';
 @Injectable()
 export class UsersService {
+  private logger = new Logger(UsersService.name);
+
   constructor(private database: DatabaseService) {}
 
   async hashData(data: string) {
@@ -82,7 +84,7 @@ export class UsersService {
     try {
       return this.database.userNest.findMany(query);
     } catch (error) {
-      console.log(error);
+      this.logger.warn(error);
       throw new HttpException(
         'something wrong with query',
         HttpStatus.NO_CONTENT,
@@ -131,7 +133,7 @@ export class UsersService {
         },
       });
     } catch (error) {
-      console.log(error);
+      this.logger.warn(error);
       throw new HttpException(
         'You cannot delete the administrator',
         HttpStatus.NOT_ACCEPTABLE,
