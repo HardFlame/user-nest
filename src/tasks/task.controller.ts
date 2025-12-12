@@ -7,28 +7,27 @@ import {
   Patch,
   Put,
   Request,
+  UseGuards,
 } from '@nestjs/common';
 import { TasksService } from './task.service';
 import { type TaskNest } from '../generated/prisma/client';
-import { Public, Role, Roles } from '../decorators/auth.decorator';
+import { Role, Roles } from '../decorators/auth.decorator';
+import { JwtAuthGuard } from 'src/jwt/jwt-auth.guard';
 
 @Controller('tasks')
 export class TasksController {
   constructor(private readonly tasksService: TasksService) {}
 
-  @Public()
   @Get()
   async getAllTasks() {
     return this.tasksService.tasks({});
   }
 
-  @Public()
   @Get('userId=:userId')
   async getTasksByUserId(@Param('userId') userId: string) {
     return await this.tasksService.tasks({ where: { userId: +userId } });
   }
 
-  @Public()
   @Get(':id')
   async getTaskById(@Param('id') id: string) {
     return this.tasksService.task({ id: +id });
@@ -44,6 +43,7 @@ export class TasksController {
     return this.tasksService.createTask(filteredDto, request);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Patch(':id')
   update(
     @Param('id') id: string,
@@ -64,8 +64,9 @@ export class TasksController {
     });
   }
 
-  @Delete(':id')
+  @UseGuards(JwtAuthGuard)
   @Roles(Role.ADMIN)
+  @Delete(':id')
   remove(@Param('id') id: string) {
     return this.tasksService.deleteTask({ id: +id });
   }

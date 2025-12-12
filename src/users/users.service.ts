@@ -7,11 +7,12 @@ export class UsersService {
   constructor(private database: DatabaseService) {}
 
   async hashData(data: string) {
-    const passSalt = await bcrypt.genSalt(10); //process.env.PASS_SALT;
+    const passSalt = process.env.PASS_SALT;
     if (!passSalt) {
       throw new Error('PASS_SALT environment variable is not set');
     }
-    return await bcrypt.hash(data, passSalt);
+    const genPassSalt = await bcrypt.genSalt(10);
+    return await bcrypt.hash(data, genPassSalt);
   }
 
   async user(UserNestWhereInput: Prisma.UserNestWhereUniqueInput) {
@@ -34,7 +35,6 @@ export class UsersService {
       where?: Prisma.UserNestWhereInput;
       orderBy?: Prisma.UserNestOrderByWithRelationInput;
     } = { where: { deleted: false } };
-    //console.log(rawQuery);
 
     if (rawQuery.where) {
       try {
@@ -75,7 +75,6 @@ export class UsersService {
         // Ignore invalid JSON, no ordering applied
       }
     }
-    console.log(query);
     try {
       return this.database.userNest.findMany(query);
     } catch (error) {

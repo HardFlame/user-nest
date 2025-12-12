@@ -2,36 +2,26 @@ import {
   Body,
   Controller,
   Get,
-  HttpException,
-  HttpStatus,
   Post,
   Request,
   UseGuards,
   // UseGuards,
 } from '@nestjs/common';
-
-// import { JwtAuthGuard } from './jwt-auth.guard';
 import { type UserNestCreateInput } from 'src/generated/prisma/models';
 import { AuthService } from './auth.service';
-import { Public } from '../decorators/auth.decorator';
-import { type Request as RequestType } from 'express';
 import { RefreshTokenGuard } from '../jwt/refreshToken.guard';
+import { JwtAuthGuard } from 'src/jwt/jwt-auth.guard';
+import { type Request as RequestType } from 'express';
 
 @Controller('auth')
 export class AuthController {
   constructor(private authService: AuthService) {}
 
-  @Public()
   @Post('register')
   async register(@Body() createUserDto: UserNestCreateInput) {
-    const result = await this.authService.register(createUserDto);
-    if (!result.success) {
-      throw new HttpException(result.message, HttpStatus.BAD_REQUEST);
-    }
-    return result;
+    return this.authService.register(createUserDto);
   }
 
-  @Public()
   @Post('login')
   async login(@Body() body: { email: string; password: string }) {
     return this.authService.login({
@@ -40,30 +30,22 @@ export class AuthController {
     });
   }
 
+  @UseGuards(JwtAuthGuard)
   @Get('profile')
   getProfile(@Request() req: RequestType) {
     const user = req.user as { email: string; id: number };
     return user;
   }
 
+  @UseGuards(JwtAuthGuard)
   @Get('logout')
   logout(@Request() req: RequestType) {
-    const user = req.user as { id: number | string };
-    if (!user.id) {
-      throw new HttpException('Auth Error', HttpStatus.UNAUTHORIZED);
-    }
-    return this.authService.logout(+user.id);
+    return this.authService.logout(req);
   }
 
-  @Public()
-  @UseGuards(RefreshTokenGuard)
+  @UseGuards(JwtAuthGuard, RefreshTokenGuard)
   @Get('refresh')
   refreshTokens(@Request() req: RequestType) {
-    const user = req.user as { id: number | string; refreshToken: string };
-    if (!user.id) {
-      throw new HttpException('Auth Error', HttpStatus.UNAUTHORIZED);
-    }
-    const refreshToken = user.refreshToken;
-    return this.authService.refreshTokens(+user.id, refreshToken);
+    return this.authService.refreshTokens(req);
   }
 }

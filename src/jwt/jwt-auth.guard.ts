@@ -2,14 +2,16 @@ import {
   ExecutionContext,
   Injectable,
   UnauthorizedException,
+  ForbiddenException,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { JwtService } from '@nestjs/jwt';
 import { AuthGuard } from '@nestjs/passport';
 import { Request } from 'express';
-import { IS_PUBLIC_KEY, Role, ROLES_KEY } from '../decorators/auth.decorator';
+import { Role, ROLES_KEY } from '../decorators/auth.decorator';
 import { UsersService } from 'src/users/users.service';
 import { AuthService } from '../auth/auth.service';
+import { Roles } from 'src/generated/prisma/enums';
 @Injectable()
 export class JwtAuthGuard extends AuthGuard('jwt') {
   constructor(
@@ -22,13 +24,6 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
   }
 
   async canActivate(context: ExecutionContext) {
-    const isPublic = this.reflector.getAllAndOverride<boolean>(IS_PUBLIC_KEY, [
-      context.getHandler(),
-      context.getClass(),
-    ]);
-    if (isPublic) {
-      return true;
-    }
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     const request = context.switchToHttp().getRequest();
     const token = this.extractTokenFromHeader(request);
@@ -38,9 +33,9 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
     try {
       const jwtSecret = process.env.JWT_SECRET;
       if (!jwtSecret) {
-        throw new Error('JWT_SECRET environment variable is not set2');
+        throw new Error('JWT_SECRET environment variable is not set');
       }
-      const payload: { email: string; id: number } =
+      const payload: { email: string; id: number; roles: Roles } =
         await this.jwtService.verifyAsync(token, {
           secret: jwtSecret,
         });
@@ -51,15 +46,12 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
         [context.getHandler(), context.getClass()],
       );
       if (requiredRoles) {
-        const user = await this.userService.user({ email: payload.email });
-        const hasRole = requiredRoles.some((role) =>
-          // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
-          user?.roles?.includes(role),
-        );
-        if (!hasRole) throw new UnauthorizedException();
+        const roles = payload.roles;
+        const hasRole = requiredRoles.some((role) => roles?.includes(role));
+        if (!hasRole) throw new ForbiddenException('You shall not pass');
       }
     } catch {
-      throw new UnauthorizedException();
+      throw new ForbiddenException('You shall not pass');
     }
     return true;
   }

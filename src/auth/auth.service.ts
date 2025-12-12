@@ -1,6 +1,5 @@
 import {
-  HttpException,
-  HttpStatus,
+  BadRequestException,
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
@@ -9,6 +8,8 @@ import { JwtService } from '@nestjs/jwt';
 import { UserNestCreateInput } from 'src/generated/prisma/models';
 import { type StringValue } from 'ms';
 import bcrypt from 'bcrypt';
+import { Roles } from 'src/generated/prisma/enums';
+import { type Request as RequestType } from 'express';
 @Injectable()
 export class AuthService {
   constructor(
@@ -34,6 +35,7 @@ export class AuthService {
       const tokens = await this._createTokens({
         email: newUser.email,
         id: newUser.id,
+        roles: newUser.roles,
       });
       await this.updateRefreshToken(newUser.id, tokens.refreshToken);
       status = { ...status, ...tokens };
@@ -42,13 +44,18 @@ export class AuthService {
         success: false,
         message: String(err),
       };
+      throw new BadRequestException(status.message);
     }
     return status;
   }
 
   async login(user: { email: string; password: string }) {
     const data = await this.validateUser(user.email, user.password);
-    const token = await this._createTokens({ email: data.email, id: data.id });
+    const token = await this._createTokens({
+      email: data.email,
+      id: data.id,
+      roles: data.roles,
+    });
     await this.updateRefreshToken(data.id, token.refreshToken);
     return {
       email: data.email,
@@ -56,16 +63,21 @@ export class AuthService {
     };
   }
 
-  async logout(userId: number) {
-    return await this.updateRefreshToken(userId, null);
+  async logout(req: RequestType) {
+    const userId = (req.user as { id: number | string }).id;
+    if (!userId) {
+      throw new UnauthorizedException('Already no longer logged in');
+    }
+    return await this.updateRefreshToken(+userId, null);
   }
 
   async hashData(data: string) {
-    const passSalt = await bcrypt.genSalt(10); //process.env.PASS_SALT;
+    const passSalt = process.env.PASS_SALT;
     if (!passSalt) {
       throw new Error('PASS_SALT environment variable is not set');
     }
-    return await bcrypt.hash(data, passSalt);
+    const genPassSalt = await bcrypt.genSalt(10);
+    return await bcrypt.hash(data, genPassSalt);
   }
 
   async validateUser(email: string, pass: string) {
@@ -80,14 +92,18 @@ export class AuthService {
     throw new UnauthorizedException();
   }
 
-  private async _createTokens(user: { email: string; id: number }) {
+  private async _createTokens(user: {
+    email: string;
+    id: number;
+    roles: Roles[];
+  }) {
     const expiresIn = process.env.EXPIRESIN;
     const RefreshExpiresIn = process.env.REFRESHEXPIRESIN;
     const jwtSecret = process.env.JWT_SECRET;
     const jwtRefreshSecret = process.env.JWT_REFRESH_SECRET;
 
     if (!jwtSecret) {
-      throw new Error('JWT_SECRET environment variable is not set1');
+      throw new Error('JWT_SECRET environment variable is not set');
     }
     if (!expiresIn) {
       throw new Error('EXPIRESIN environment variable is not set');
@@ -117,16 +133,28 @@ export class AuthService {
     };
   }
 
-  async refreshTokens(userId: number, refreshToken: string) {
-    const user = await this.usersService.user({ id: userId });
-    if (!user || !user.refreshToken) {
-      throw new HttpException('Access Denied', HttpStatus.UNAUTHORIZED);
+  async refreshTokens(req: RequestType) {
+    const { id: userId, refreshToken } = req.user as {
+      id: number | string;
+      refreshToken: string;
+    };
+    if (!userId) {
+      throw new BadRequestException();
     }
+    const user = await this.usersService.user({ id: +userId });
+    if (!user || !user.refreshToken) {
+      throw new UnauthorizedException('Access Denied');
+    }
+
     const verifyTokens = bcrypt.compareSync(refreshToken, user.refreshToken);
     if (!verifyTokens) {
-      throw new HttpException('Access Denied', HttpStatus.UNAUTHORIZED);
+      throw new UnauthorizedException('Access Denied');
     }
-    const tokens = await this._createTokens({ email: user.email, id: user.id });
+    const tokens = await this._createTokens({
+      email: user.email,
+      id: user.id,
+      roles: user.roles,
+    });
     await this.updateRefreshToken(user.id, tokens.refreshToken);
     return { email: user.email, ...tokens };
   }
@@ -135,7 +163,7 @@ export class AuthService {
     const hashedRefreshToken = refreshToken
       ? await this.hashData(refreshToken)
       : null;
-    await this.usersService.updateUser({
+    return await this.usersService.updateUser({
       where: { id: userId },
       data: {
         refreshToken: hashedRefreshToken,
