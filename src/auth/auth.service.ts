@@ -5,11 +5,12 @@ import {
 } from '@nestjs/common';
 import { UsersService } from 'src/users/users.service';
 import { JwtService } from '@nestjs/jwt';
-import { UserNestCreateInput } from 'src/generated/prisma/models';
 import { type StringValue } from 'ms';
 import bcrypt from 'bcrypt';
-import { Roles } from 'src/generated/prisma/enums';
 import { type Request as RequestType } from 'express';
+import type { UserNestUncheckedCreateInput } from 'src/generated/prisma/models';
+import { LoginDto, userInJwtDto } from './dto/login.dto';
+
 @Injectable()
 export class AuthService {
   constructor(
@@ -17,7 +18,7 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  async register(user: UserNestCreateInput) {
+  async register(registerDto: UserNestUncheckedCreateInput) {
     let status: {
       success: boolean;
       message: string;
@@ -31,7 +32,7 @@ export class AuthService {
     };
 
     try {
-      const newUser = await this.usersService.createUser(user);
+      const newUser = await this.usersService.createUser(registerDto);
       const tokens = await this._createTokens({
         email: newUser.email,
         id: newUser.id,
@@ -49,8 +50,8 @@ export class AuthService {
     return status;
   }
 
-  async login(user: { email: string; password: string }) {
-    const data = await this.validateUser(user.email, user.password);
+  async login(loginDto: LoginDto) {
+    const data = await this.validateUser(loginDto.email, loginDto.password);
     const token = await this._createTokens({
       email: data.email,
       id: data.id,
@@ -64,7 +65,7 @@ export class AuthService {
   }
 
   async logout(req: RequestType) {
-    const userId = (req.user as { id: number | string }).id;
+    const userId = (req.user as userInJwtDto).id;
     if (!userId) {
       throw new UnauthorizedException('Already no longer logged in');
     }
@@ -92,11 +93,7 @@ export class AuthService {
     throw new UnauthorizedException();
   }
 
-  private async _createTokens(user: {
-    email: string;
-    id: number;
-    roles: Roles[];
-  }) {
+  private async _createTokens(user: userInJwtDto) {
     const expiresIn = process.env.EXPIRESIN;
     const RefreshExpiresIn = process.env.REFRESHEXPIRESIN;
     const jwtSecret = process.env.JWT_SECRET;

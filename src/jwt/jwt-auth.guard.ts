@@ -11,7 +11,7 @@ import { Request } from 'express';
 import { Role, ROLES_KEY } from '../decorators/auth.decorator';
 import { UsersService } from 'src/users/users.service';
 import { AuthService } from '../auth/auth.service';
-import { Roles } from 'src/generated/prisma/enums';
+import { userInJwtDto } from 'src/auth/dto/login.dto';
 @Injectable()
 export class JwtAuthGuard extends AuthGuard('jwt') {
   constructor(
@@ -35,10 +35,9 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
       if (!jwtSecret) {
         throw new Error('JWT_SECRET environment variable is not set');
       }
-      const payload: { email: string; id: number; roles: Roles } =
-        await this.jwtService.verifyAsync(token, {
-          secret: jwtSecret,
-        });
+      const payload: userInJwtDto = await this.jwtService.verifyAsync(token, {
+        secret: jwtSecret,
+      });
       // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       request['user'] = payload;
       const requiredRoles = this.reflector.getAllAndOverride<Role[]>(

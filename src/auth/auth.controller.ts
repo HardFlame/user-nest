@@ -7,33 +7,31 @@ import {
   UseGuards,
   // UseGuards,
 } from '@nestjs/common';
-import { type UserNestCreateInput } from 'src/generated/prisma/models';
 import { AuthService } from './auth.service';
 import { RefreshTokenGuard } from '../jwt/refreshToken.guard';
 import { JwtAuthGuard } from 'src/jwt/jwt-auth.guard';
 import { type Request as RequestType } from 'express';
+import { LoginDto, userInJwtDto } from './dto/login.dto';
+import type { UserNestUncheckedCreateInput } from 'src/generated/prisma/models';
 
 @Controller('auth')
 export class AuthController {
   constructor(private authService: AuthService) {}
 
   @Post('register')
-  async register(@Body() createUserDto: UserNestCreateInput) {
-    return this.authService.register(createUserDto);
+  async register(@Body() registerDto: UserNestUncheckedCreateInput) {
+    return this.authService.register(registerDto);
   }
 
   @Post('login')
-  async login(@Body() body: { email: string; password: string }) {
-    return this.authService.login({
-      email: body.email,
-      password: body.password,
-    });
+  async login(@Body() loginDto: LoginDto) {
+    return this.authService.login(loginDto);
   }
 
   @UseGuards(JwtAuthGuard)
   @Get('profile')
   getProfile(@Request() req: RequestType) {
-    const user = req.user as { email: string; id: number };
+    const user = req.user as userInJwtDto;
     return user;
   }
 

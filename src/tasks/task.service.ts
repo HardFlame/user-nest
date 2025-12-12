@@ -1,6 +1,5 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { DatabaseService } from 'src/database/database.service';
-import { Prisma, Roles } from 'src/generated/prisma/client';
 import {
   TaskNestOrderByWithRelationInput,
   TaskNestUncheckedCreateInput,
@@ -9,12 +8,13 @@ import {
   TaskNestWhereUniqueInput,
 } from 'src/generated/prisma/models';
 import { type Request as RequestType } from 'express';
+import { userInJwtDto } from 'src/auth/dto/login.dto';
 
 @Injectable()
 export class TasksService {
   constructor(private database: DatabaseService) {}
 
-  async task(TaskNestWhereUniqueInput: Prisma.TaskNestWhereUniqueInput) {
+  async task(TaskNestWhereUniqueInput: TaskNestWhereUniqueInput) {
     return await this.database.taskNest.findUnique({
       where: TaskNestWhereUniqueInput,
     });
@@ -38,28 +38,28 @@ export class TasksService {
   }
   async createTask(
     dto: TaskNestUncheckedCreateInput,
-    { user }: { user: { email: string; id: string } },
+    req: { user: userInJwtDto },
   ) {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { created, updated, ...filteredDto } = dto;
-    if (!user?.id) {
+    if (!req.user?.id) {
       throw new UnauthorizedException();
     }
-    dto.userId = +user.id;
+    dto.userId = +req.user.id;
     return this.database.taskNest.create({
       data: filteredDto,
     });
   }
 
   async updateTask(params: {
-    where: Prisma.TaskNestWhereUniqueInput;
+    where: TaskNestWhereUniqueInput;
     data: TaskNestUncheckedUpdateInput;
     req: RequestType;
   }) {
     const { where, data, req } = params;
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { created, ...filteredDto } = data;
-    const user = req.user as { id: string; email: string; roles: Roles[] };
+    const user = req.user as userInJwtDto;
     if (!user.id) {
       throw new UnauthorizedException();
     }
@@ -75,7 +75,7 @@ export class TasksService {
     });
   }
 
-  async deleteTask(where: Prisma.TaskNestWhereUniqueInput) {
+  async deleteTask(where: TaskNestWhereUniqueInput) {
     return this.database.taskNest.delete({
       where,
     });

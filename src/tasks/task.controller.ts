@@ -10,10 +10,14 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { TasksService } from './task.service';
-import { type TaskNest } from '../generated/prisma/client';
 import { Role, Roles } from '../decorators/auth.decorator';
 import { JwtAuthGuard } from 'src/jwt/jwt-auth.guard';
 import { type Request as RequestType } from 'express';
+import type {
+  TaskNestUncheckedCreateInput,
+  TaskNestUncheckedUpdateInput,
+} from 'src/generated/prisma/models';
+import { userInJwtDto } from 'src/auth/dto/login.dto';
 
 @Controller('tasks')
 export class TasksController {
@@ -36,8 +40,8 @@ export class TasksController {
 
   @Put()
   create(
-    @Body() createTaskDto: TaskNest,
-    @Request() request: { user: { email: string; id: string } },
+    @Body() createTaskDto: TaskNestUncheckedCreateInput,
+    @Request() request: { user: userInJwtDto },
   ) {
     return this.tasksService.createTask(createTaskDto, request);
   }
@@ -46,7 +50,7 @@ export class TasksController {
   @Patch(':id')
   update(
     @Param('id') id: string,
-    @Body() updateTaskDto: TaskNest,
+    @Body() updateTaskDto: TaskNestUncheckedUpdateInput,
     @Request() req: RequestType,
   ) {
     return this.tasksService.updateTask({

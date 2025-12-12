@@ -1,7 +1,13 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { DatabaseService } from 'src/database/database.service';
-import { Prisma } from 'src/generated/prisma/client';
 import bcrypt from 'bcrypt';
+import {
+  UserNestWhereUniqueInput,
+  UserNestWhereInput,
+  UserNestOrderByWithRelationInput,
+  UserNestCreateInput,
+  UserNestUncheckedUpdateInput,
+} from 'src/generated/prisma/models';
 @Injectable()
 export class UsersService {
   constructor(private database: DatabaseService) {}
@@ -15,7 +21,7 @@ export class UsersService {
     return await bcrypt.hash(data, genPassSalt);
   }
 
-  async user(UserNestWhereInput: Prisma.UserNestWhereUniqueInput) {
+  async user(UserNestWhereInput: UserNestWhereUniqueInput) {
     return this.database.userNest.findUnique({
       where: UserNestWhereInput,
     });
@@ -31,16 +37,14 @@ export class UsersService {
     const query: {
       skip?: number;
       take?: number;
-      cursor?: Prisma.UserNestWhereUniqueInput;
-      where?: Prisma.UserNestWhereInput;
-      orderBy?: Prisma.UserNestOrderByWithRelationInput;
+      cursor?: UserNestWhereUniqueInput;
+      where?: UserNestWhereInput;
+      orderBy?: UserNestOrderByWithRelationInput;
     } = { where: { deleted: false } };
 
     if (rawQuery.where) {
       try {
-        const customWhere = JSON.parse(
-          rawQuery.where,
-        ) as Prisma.UserNestWhereInput;
+        const customWhere = JSON.parse(rawQuery.where) as UserNestWhereInput;
         query.where = {
           ...query.where,
           AND: {
@@ -70,7 +74,7 @@ export class UsersService {
       try {
         query.orderBy = JSON.parse(
           rawQuery.orderBy,
-        ) as Prisma.UserNestOrderByWithRelationInput;
+        ) as UserNestOrderByWithRelationInput;
       } catch {
         // Ignore invalid JSON, no ordering applied
       }
@@ -85,7 +89,7 @@ export class UsersService {
       );
     }
   }
-  async createUser(dto: Prisma.UserNestCreateInput) {
+  async createUser(dto: UserNestCreateInput) {
     if (dto.password) {
       dto.password = await this.hashData(dto.password);
     }
@@ -93,8 +97,8 @@ export class UsersService {
   }
 
   async updateUser(params: {
-    where: Prisma.UserNestWhereUniqueInput;
-    data: Prisma.UserNestUncheckedUpdateInput;
+    where: UserNestWhereUniqueInput;
+    data: UserNestUncheckedUpdateInput;
   }) {
     const { where, data } = params;
     if (typeof data.password === 'string') {
@@ -108,7 +112,7 @@ export class UsersService {
     });
   }
 
-  async deleteUser(where: Prisma.UserNestWhereUniqueInput) {
+  async deleteUser(where: UserNestWhereUniqueInput) {
     const data = { deleted: true };
     try {
       return await this.database.userNest.update({
