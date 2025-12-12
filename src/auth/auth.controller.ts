@@ -41,7 +41,7 @@ export class AuthController {
     return this.authService.logout(req);
   }
 
-  @UseGuards(JwtAuthGuard, RefreshTokenGuard)
+  @UseGuards(RefreshTokenGuard)
   @Get('refresh')
   refreshTokens(@Request() req: RequestType) {
     return this.authService.refreshTokens(req);
