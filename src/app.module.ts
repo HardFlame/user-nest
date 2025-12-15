@@ -9,12 +9,14 @@ import { DatabaseService } from './database/database.service';
 import { CronModule } from './cron/cron.module';
 import { ScheduleModule } from '@nestjs/schedule';
 import { WinstonModule } from 'nest-winston';
+import { EventEmitterModule } from '@nestjs/event-emitter';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       envFilePath: `.env`,
     }),
+    EventEmitterModule.forRoot(),
     WinstonModule.forRoot({}),
     ScheduleModule.forRoot(),
     DatabaseModule,

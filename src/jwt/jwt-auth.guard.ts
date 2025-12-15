@@ -3,17 +3,21 @@ import {
   Injectable,
   UnauthorizedException,
   ForbiddenException,
+  Logger,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { JwtService } from '@nestjs/jwt';
 import { AuthGuard } from '@nestjs/passport';
-import { Request } from 'express';
+import { type Request as RequestType } from 'express';
 import { Role, ROLES_KEY } from '../decorators/auth.decorator';
 import { UsersService } from 'src/users/users.service';
 import { AuthService } from '../auth/auth.service';
 import { userInJwtDto } from 'src/auth/dto/login.dto';
+import { Socket } from 'socket.io';
+
 @Injectable()
 export class JwtAuthGuard extends AuthGuard('jwt') {
+  private logger = new Logger(JwtAuthGuard.name);
   constructor(
     private reflector: Reflector,
     private jwtService: JwtService,
@@ -49,7 +53,8 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
         const hasRole = requiredRoles.some((role) => roles?.includes(role));
         if (!hasRole) throw new ForbiddenException('You shall not pass');
       }
-    } catch {
+    } catch (err) {
+      this.logger.error(JSON.stringify(err));
       throw new ForbiddenException('You shall not pass');
     }
     return true;
@@ -63,8 +68,16 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
     });
   }
 
-  private extractTokenFromHeader(request: Request): string | undefined {
-    const [type, token] = request.headers.authorization?.split(' ') ?? [];
+  private extractTokenFromHeader(
+    request: RequestType | Socket,
+  ): string | undefined {
+    function isSocket(request: RequestType | Socket): request is Socket {
+      return (request as Socket).handshake !== undefined;
+    }
+    const headers = isSocket(request)
+      ? request.handshake.headers
+      : request.headers;
+    const [type, token] = headers.authorization?.split(' ') ?? [];
     return type === 'Bearer' ? token : undefined;
   }
 }

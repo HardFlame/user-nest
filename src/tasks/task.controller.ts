@@ -38,6 +38,7 @@ export class TasksController {
     return this.tasksService.task({ id: +id });
   }
 
+  @UseGuards(JwtAuthGuard)
   @Put()
   create(
     @Body() createTaskDto: TaskNestUncheckedCreateInput,
