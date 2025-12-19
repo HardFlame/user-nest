@@ -20,7 +20,7 @@ const config: runtime.GetPrismaClientConfig = {
   "clientVersion": "7.0.1",
   "engineVersion": "f09f2815f091dbba658cdcd2264306d88bb5bda6",
   "activeProvider": "postgresql",
-  "inlineSchema": "generator client {\n  provider     = \"prisma-client\"\n  output       = \"../src/generated/prisma\"\n  moduleFormat = \"cjs\"\n}\n\ndatasource postgresql {\n  provider = \"postgresql\"\n}\n\nmodel UserNest {\n  id           Int        @id @default(autoincrement())\n  email        String     @unique\n  name         String?\n  roles        Roles[]    @default([USER])\n  password     String?\n  deleted      Boolean    @default(false)\n  tasks        TaskNest[]\n  refreshToken String?\n}\n\nenum Roles {\n  USER\n  ADMIN\n}\n\nmodel TaskNest {\n  id      Int      @id @default(autoincrement())\n  userId  Int\n  user    UserNest @relation(fields: [userId], references: [id])\n  created DateTime @default(now())\n  updated DateTime @default(now())\n  title   String\n  text    String\n}\n",
+  "inlineSchema": "generator client {\n  provider     = \"prisma-client\"\n  output       = \"../src/generated/prisma\"\n  moduleFormat = \"cjs\"\n}\n\ndatasource postgresql {\n  provider = \"postgresql\"\n}\n\nmodel UserNest {\n  id           Int        @id @default(autoincrement())\n  email        String     @unique\n  name         String?\n  roles        Roles[]    @default([USER])\n  password     String?\n  deleted      Boolean    @default(false)\n  tasks        TaskNest[]\n  chats        ChatNest[]\n  refreshToken String?\n}\n\nenum Roles {\n  USER\n  ADMIN\n}\n\nmodel TaskNest {\n  id      Int      @id @default(autoincrement())\n  userId  Int\n  user    UserNest @relation(fields: [userId], references: [id])\n  created DateTime @default(now())\n  updated DateTime @default(now())\n  title   String\n  text    String\n}\n\nmodel ChatNest {\n  id       Int      @id @default(autoincrement())\n  userId   Int\n  user     UserNest @relation(fields: [userId], references: [id])\n  message  String\n  room     Room     @default(DEFAULT)\n  sendedTo Int?\n  created  DateTime @default(now())\n}\n\nenum Room {\n  GLOBAL\n  DEFAULT\n  ROOM1\n  ROOM2\n  WHISPER\n}\n",
   "runtimeDataModel": {
     "models": {},
     "enums": {},
@@ -28,7 +28,7 @@ const config: runtime.GetPrismaClientConfig = {
   }
 }
 
-config.runtimeDataModel = JSON.parse("{\"models\":{\"UserNest\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"email\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"roles\",\"kind\":\"enum\",\"type\":\"Roles\"},{\"name\":\"password\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"deleted\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"tasks\",\"kind\":\"object\",\"type\":\"TaskNest\",\"relationName\":\"TaskNestToUserNest\"},{\"name\":\"refreshToken\",\"kind\":\"scalar\",\"type\":\"String\"}],\"dbName\":null},\"TaskNest\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"userId\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"user\",\"kind\":\"object\",\"type\":\"UserNest\",\"relationName\":\"TaskNestToUserNest\"},{\"name\":\"created\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updated\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"title\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"text\",\"kind\":\"scalar\",\"type\":\"String\"}],\"dbName\":null}},\"enums\":{},\"types\":{}}")
+config.runtimeDataModel = JSON.parse("{\"models\":{\"UserNest\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"email\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"name\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"roles\",\"kind\":\"enum\",\"type\":\"Roles\"},{\"name\":\"password\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"deleted\",\"kind\":\"scalar\",\"type\":\"Boolean\"},{\"name\":\"tasks\",\"kind\":\"object\",\"type\":\"TaskNest\",\"relationName\":\"TaskNestToUserNest\"},{\"name\":\"chats\",\"kind\":\"object\",\"type\":\"ChatNest\",\"relationName\":\"ChatNestToUserNest\"},{\"name\":\"refreshToken\",\"kind\":\"scalar\",\"type\":\"String\"}],\"dbName\":null},\"TaskNest\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"userId\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"user\",\"kind\":\"object\",\"type\":\"UserNest\",\"relationName\":\"TaskNestToUserNest\"},{\"name\":\"created\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"updated\",\"kind\":\"scalar\",\"type\":\"DateTime\"},{\"name\":\"title\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"text\",\"kind\":\"scalar\",\"type\":\"String\"}],\"dbName\":null},\"ChatNest\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"userId\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"user\",\"kind\":\"object\",\"type\":\"UserNest\",\"relationName\":\"ChatNestToUserNest\"},{\"name\":\"message\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"room\",\"kind\":\"enum\",\"type\":\"Room\"},{\"name\":\"sendedTo\",\"kind\":\"scalar\",\"type\":\"Int\"},{\"name\":\"created\",\"kind\":\"scalar\",\"type\":\"DateTime\"}],\"dbName\":null}},\"enums\":{},\"types\":{}}")
 
 async function decodeBase64AsWasm(wasmBase64: string): Promise<WebAssembly.Module> {
   const { Buffer } = await import('node:buffer')
@@ -193,6 +193,16 @@ export interface PrismaClient<
     * ```
     */
   get taskNest(): Prisma.TaskNestDelegate<ExtArgs, { omit: OmitOpts }>;
+
+  /**
+   * `prisma.chatNest`: Exposes CRUD operations for the **ChatNest** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more ChatNests
+    * const chatNests = await prisma.chatNest.findMany()
+    * ```
+    */
+  get chatNest(): Prisma.ChatNestDelegate<ExtArgs, { omit: OmitOpts }>;
 }
 
 export function getPrismaClientClass(): PrismaClientConstructor {

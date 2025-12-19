@@ -19,11 +19,16 @@ import { Server, Socket } from 'socket.io';
 import { JwtAuthGuard } from 'src/jwt/jwt-auth.guard';
 import { OnEvent } from '@nestjs/event-emitter';
 
-@WebSocketGateway()
+@WebSocketGateway({ namespace: '/tasks' })
 export class TasksGateway implements OnGatewayConnection, OnGatewayDisconnect {
-  private logger = new Logger(TasksGateway.name);
   @WebSocketServer() server: Server;
-
+  private logger = new Logger(TasksGateway.name);
+  // private taskSpace: Namespace<
+  //   DefaultEventsMap,
+  //   DefaultEventsMap,
+  //   DefaultEventsMap,
+  //   any
+  // >;
   constructor(private readonly tasksService: TasksService) {}
 
   handleConnection(client: Socket) {

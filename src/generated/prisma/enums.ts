@@ -15,3 +15,14 @@ export const Roles = {
 } as const
 
 export type Roles = (typeof Roles)[keyof typeof Roles]
+
+
+export const Room = {
+  GLOBAL: 'GLOBAL',
+  DEFAULT: 'DEFAULT',
+  ROOM1: 'ROOM1',
+  ROOM2: 'ROOM2',
+  WHISPER: 'WHISPER'
+} as const
+
+export type Room = (typeof Room)[keyof typeof Room]

@@ -16,6 +16,7 @@ model UserNest {
   password  String?
   deleted Boolean @default(false)
   tasks TaskNest[]
+  chats ChatNest[]
   refreshToken String?
 }
 
@@ -32,4 +33,22 @@ model TaskNest {
   updated DateTime @default(now())
   title String
   text String
+}
+
+model ChatNest {
+  id    Int     @id @default(autoincrement())
+  userId Int
+  user UserNest @relation(fields: [userId], references: [id])
+  message String
+  room Room @default(DEFAULT)
+  sendedTo Int?
+  created DateTime @default(now())
+}
+
+enum Room {
+  GLOBAL
+  DEFAULT
+  ROOM1
+  ROOM2
+  WHISPER
 }

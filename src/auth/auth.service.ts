@@ -35,6 +35,7 @@ export class AuthService {
       const newUser = await this.usersService.createUser(registerDto);
       const tokens = await this._createTokens({
         email: newUser.email,
+        name: newUser.name || 'incognito',
         id: newUser.id,
         roles: newUser.roles,
       });
@@ -54,6 +55,7 @@ export class AuthService {
     const data = await this.validateUser(loginDto.email, loginDto.password);
     const token = await this._createTokens({
       email: data.email,
+      name: data.name || 'incognito',
       id: data.id,
       roles: data.roles,
     });
@@ -149,6 +151,7 @@ export class AuthService {
     }
     const tokens = await this._createTokens({
       email: user.email,
+      name: user.name || 'incognito',
       id: user.id,
       roles: user.roles,
     });

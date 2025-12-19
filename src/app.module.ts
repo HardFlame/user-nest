@@ -10,6 +10,7 @@ import { CronModule } from './cron/cron.module';
 import { ScheduleModule } from '@nestjs/schedule';
 import { WinstonModule } from 'nest-winston';
 import { EventEmitterModule } from '@nestjs/event-emitter';
+import { ChatModule } from './chat/chat.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { EventEmitterModule } from '@nestjs/event-emitter';
     // AuthModule,
     UsersModule,
     TasksModule,
+    ChatModule,
   ],
   controllers: [AppController],
   providers: [AppService, DatabaseService],

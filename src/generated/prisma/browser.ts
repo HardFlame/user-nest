@@ -27,3 +27,8 @@ export type UserNest = Prisma.UserNestModel
  * 
  */
 export type TaskNest = Prisma.TaskNestModel
+/**
+ * Model ChatNest
+ * 
+ */
+export type ChatNest = Prisma.ChatNestModel

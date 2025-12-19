@@ -10,4 +10,5 @@
  */
 export type * from './models/UserNest.js'
 export type * from './models/TaskNest.js'
+export type * from './models/ChatNest.js'
 export type * from './commonInputTypes.js'

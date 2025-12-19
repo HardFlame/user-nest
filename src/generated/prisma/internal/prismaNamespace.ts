@@ -385,7 +385,8 @@ type FieldRefInputType<Model, FieldType> = Model extends never ? never : FieldRe
 
 export const ModelName = {
   UserNest: 'UserNest',
-  TaskNest: 'TaskNest'
+  TaskNest: 'TaskNest',
+  ChatNest: 'ChatNest'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -401,7 +402,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "userNest" | "taskNest"
+    modelProps: "userNest" | "taskNest" | "chatNest"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -553,6 +554,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    ChatNest: {
+      payload: Prisma.$ChatNestPayload<ExtArgs>
+      fields: Prisma.ChatNestFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.ChatNestFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ChatNestPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.ChatNestFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ChatNestPayload>
+        }
+        findFirst: {
+          args: Prisma.ChatNestFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ChatNestPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.ChatNestFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ChatNestPayload>
+        }
+        findMany: {
+          args: Prisma.ChatNestFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ChatNestPayload>[]
+        }
+        create: {
+          args: Prisma.ChatNestCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ChatNestPayload>
+        }
+        createMany: {
+          args: Prisma.ChatNestCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.ChatNestCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ChatNestPayload>[]
+        }
+        delete: {
+          args: Prisma.ChatNestDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ChatNestPayload>
+        }
+        update: {
+          args: Prisma.ChatNestUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ChatNestPayload>
+        }
+        deleteMany: {
+          args: Prisma.ChatNestDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.ChatNestUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.ChatNestUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ChatNestPayload>[]
+        }
+        upsert: {
+          args: Prisma.ChatNestUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ChatNestPayload>
+        }
+        aggregate: {
+          args: Prisma.ChatNestAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateChatNest>
+        }
+        groupBy: {
+          args: Prisma.ChatNestGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ChatNestGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.ChatNestCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ChatNestCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -615,6 +690,18 @@ export const TaskNestScalarFieldEnum = {
 } as const
 
 export type TaskNestScalarFieldEnum = (typeof TaskNestScalarFieldEnum)[keyof typeof TaskNestScalarFieldEnum]
+
+
+export const ChatNestScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  message: 'message',
+  room: 'room',
+  sendedTo: 'sendedTo',
+  created: 'created'
+} as const
+
+export type ChatNestScalarFieldEnum = (typeof ChatNestScalarFieldEnum)[keyof typeof ChatNestScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -707,6 +794,20 @@ export type DateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel
  * Reference to a field of type 'DateTime[]'
  */
 export type ListDateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime[]'>
+    
+
+
+/**
+ * Reference to a field of type 'Room'
+ */
+export type EnumRoomFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Room'>
+    
+
+
+/**
+ * Reference to a field of type 'Room[]'
+ */
+export type ListEnumRoomFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Room[]'>
     
 
 
@@ -804,6 +905,7 @@ export type PrismaClientOptions = ({
 export type GlobalOmitConfig = {
   userNest?: Prisma.UserNestOmit
   taskNest?: Prisma.TaskNestOmit
+  chatNest?: Prisma.ChatNestOmit
 }
 
 /* Types for Logging */

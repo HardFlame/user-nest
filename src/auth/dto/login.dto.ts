@@ -14,6 +14,10 @@ export class userInJwtDto {
   @IsEmail()
   email: string;
 
+  @IsString()
+  @IsNotEmpty()
+  name: string;
+
   @IsNotEmpty()
   id: number | string;
 

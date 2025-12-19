@@ -52,7 +52,8 @@ export const AnyNull = runtime.AnyNull
 
 export const ModelName = {
   UserNest: 'UserNest',
-  TaskNest: 'TaskNest'
+  TaskNest: 'TaskNest',
+  ChatNest: 'ChatNest'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -94,6 +95,18 @@ export const TaskNestScalarFieldEnum = {
 } as const
 
 export type TaskNestScalarFieldEnum = (typeof TaskNestScalarFieldEnum)[keyof typeof TaskNestScalarFieldEnum]
+
+
+export const ChatNestScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  message: 'message',
+  room: 'room',
+  sendedTo: 'sendedTo',
+  created: 'created'
+} as const
+
+export type ChatNestScalarFieldEnum = (typeof ChatNestScalarFieldEnum)[keyof typeof ChatNestScalarFieldEnum]
 
 
 export const SortOrder = {
